@@ -1,0 +1,31 @@
+{
+  "name": "polly-ssml-split",
+  "version": "0.1.0",
+  "description": "Splits long texts with SSML tags by batches suitable for working with AWS Polly TTS.",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "tap test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oleglegun/polly-ssml-split.git"
+  },
+  "keywords": [
+    "polly",
+    "ssml split",
+    "aws",
+    "tts"
+  ],
+  "author": "Oleg Legun <oleg.legun@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/oleglegun/polly-ssml-split/issues"
+  },
+  "homepage": "https://github.com/oleglegun/polly-ssml-split#readme",
+  "devDependencies": {
+    "tap": "^11.1.3"
+  }
+}
