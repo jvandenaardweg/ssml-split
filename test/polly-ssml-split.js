@@ -1,6 +1,8 @@
 const t = require('tap')
 const pollySSMLSplit = require('../lib/polly-ssml-split')
 
+// TODO tests for splitChars, throws
+
 const testCases = [
     {
         options: {},
