@@ -18,6 +18,26 @@ const testCases = [
     {
         options: {
             softLimit: 5,
+            hardLimit: 10,
+        },
+        ssml: 'Hello',
+        result: ['<speak>Hello</speak>'],
+    },
+    {
+        options: {
+            softLimit: 5,
+            hardLimit: 15,
+        },
+        ssml: 'plain text <ssmltag>Hello</ssmltag> plain text',
+        result: [
+            '<speak>plain text </speak>',
+            '<speak><ssmltag>Hello</ssmltag></speak>',
+            '<speak> plain text</speak>',
+        ],
+    },
+    {
+        options: {
+            softLimit: 5,
             hardLimit: 15,
         },
         ssml:
