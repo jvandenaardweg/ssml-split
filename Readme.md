@@ -12,7 +12,11 @@ The default behaviour would count that as 9 characters.
 With `includeSSMLTags: true` it will be count as 31 characters.
 
 ## Why?
-Google's Text to Speech includes the ssml tag characters in the character count of the `5000` character limit. The `polly-ssml-split` library already handles splitting of SSML correctly, but wasn't working properly for Google's Text to Speech limitations.
+AWS Polly just counts the characters between the SSML tags. Google's Text to Speech is a little bit different, it includes the SSML tag characters in the character count of the `5000` character limit. 
+
+The `polly-ssml-split` library already handles splitting of SSML correctly for AWS Polly, but wasn't working properly for Google's Text to Speech.
+
+By adding the option `includeSSMLTags` to include the SSML tag characters in the calculation on when to split the SSML, makes the library also work with Google's Text to Speech API.
 
 This package should prevent you from seeing this error when using Google's Text to Speech API:
 `INVALID_ARGUMENT: 5000 characters limit exceeded.`
