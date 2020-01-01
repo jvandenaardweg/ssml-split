@@ -12,6 +12,22 @@ The default behaviour would count that as 9 characters, which is fine for AWS Po
 
 With `includeSSMLTags: true` it will be count as 31 characters, just like Google's Text to Speech API counts it.
 
+
+### Example:
+```javascript
+const ssmlSplit = require('ssml-split')
+
+const options = {
+  softLimit: 4000, // Allow the splitter to find the correct split moment between 4000-5000 characters
+  hardLimit: 5000, // Google Text to Speech limitation
+  includeSSMLTags: true
+}
+
+pollySSMLSplit.configure(options)
+
+const batches = ssmlSplit.split('<speak>your long text here</speak>')
+```
+
 ## Why?
 AWS Polly just counts the characters between the SSML tags. Google's Text to Speech is a little bit different, it includes the SSML tag characters in the character count of the `5000` character limit. 
 
