@@ -1,4 +1,5 @@
-# SSML Splitter
+# SSML Split
+Splits SSML strings into batches AWS Polly ánd Google's Text to Speech API can consume.
 
 Based on [polly-ssml-split](https://github.com/oleglegun/polly-ssml-split) by [@oleglegun](https://github.com/oleglegun)
 
