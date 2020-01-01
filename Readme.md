@@ -14,7 +14,9 @@ The default behaviour would count that as 9 characters, which is fine for AWS Po
 With `includeSSMLTagsInCounter: true` it will be count as 31 characters, just like Google's Text to Speech API counts it.
 
 
-### Example:
+### Usage:
+`npm install ssml-split --save`
+
 ```javascript
 const ssmlSplit = require('ssml-split')
 
