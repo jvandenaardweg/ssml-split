@@ -3,14 +3,14 @@
 Based on [polly-ssml-split](https://github.com/oleglegun/polly-ssml-split)
 
 ## Changes in this package:
-Added `includeSSMLTags: boolean` option to count characters based on the complete SSML tag and not just the included text characters.
+Added `includeSSMLTagsInCounter: boolean` option to count characters based on the complete SSML tag and not just the included text characters.
 
 For example:
 `<speak><p>some text</p></speak>`
 
 The default behaviour would count that as 9 characters, which is fine for AWS Polly, but not for Google's Text to Speech API.
 
-With `includeSSMLTags: true` it will be count as 31 characters, just like Google's Text to Speech API counts it.
+With `includeSSMLTagsInCounter: true` it will be count as 31 characters, just like Google's Text to Speech API counts it.
 
 
 ### Example:
@@ -20,7 +20,7 @@ const ssmlSplit = require('ssml-split')
 const options = {
   softLimit: 4000, // Allow the splitter to find the correct split moment between 4000-5000 characters
   hardLimit: 5000, // Google Text to Speech limitation
-  includeSSMLTags: true // Set true when using Google Text to Speech API, set to false with AWS Polly
+  includeSSMLTagsInCounter: true // Set true when using Google Text to Speech API, set to false with AWS Polly
 }
 
 pollySSMLSplit.configure(options)
