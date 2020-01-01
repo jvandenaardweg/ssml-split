@@ -20,7 +20,7 @@ const ssmlSplit = require('ssml-split')
 const options = {
   softLimit: 4000, // Allow the splitter to find the correct split moment between 4000-5000 characters
   hardLimit: 5000, // Google Text to Speech limitation
-  includeSSMLTags: true
+  includeSSMLTags: true // Set true when using Google Text to Speech API, set to false with AWS Polly
 }
 
 pollySSMLSplit.configure(options)
