@@ -23,7 +23,7 @@ const options = {
   includeSSMLTagsInCounter: true // Set true when using Google Text to Speech API, set to false with AWS Polly
 }
 
-pollySSMLSplit.configure(options)
+ssmlSplit.configure(options)
 
 const batches = ssmlSplit.split('<speak>your long text here</speak>')
 ```
