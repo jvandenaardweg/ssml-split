@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/oleglegun/polly-ssml-split.git"
+    "url": "git+https://github.com/jvandenaardweg/ssml-split.git"
   },
   "keywords": [
     "polly",
@@ -23,9 +23,9 @@
   "author": "Oleg Legun <oleg.legun@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/oleglegun/polly-ssml-split/issues"
+    "url": "https://github.com/jvandenaardweg/ssml-split/issues"
   },
-  "homepage": "https://github.com/oleglegun/polly-ssml-split#readme",
+  "homepage": "https://github.com/jvandenaardweg/ssml-split#readme",
   "devDependencies": {
     "tap": "^11.1.4"
   },
