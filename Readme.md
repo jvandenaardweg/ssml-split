@@ -8,9 +8,9 @@ Added `includeSSMLTags: boolean` option to count characters based on the complet
 For example:
 `<speak><p>some text</p></speak>`
 
-The default behaviour would count that as 9 characters.
+The default behaviour would count that as 9 characters, which is fine for AWS Polly, but not for Google's Text to Speech API.
 
-With `includeSSMLTags: true` it will be count as 31 characters.
+With `includeSSMLTags: true` it will be count as 31 characters, just like Google's Text to Speech API counts it.
 
 ## Why?
 AWS Polly just counts the characters between the SSML tags. Google's Text to Speech is a little bit different, it includes the SSML tag characters in the character count of the `5000` character limit. 
