@@ -1,6 +1,6 @@
 # SSML Splitter
 
-Based on [polly-ssml-split](https://github.com/oleglegun/polly-ssml-split)
+Based on [polly-ssml-split](https://github.com/oleglegun/polly-ssml-split) by [@oleglegun](https://github.com/oleglegun)
 
 ## Changes in this package:
 Added `includeSSMLTagsInCounter: boolean` option to count characters based on the complete SSML tag and not just the included text characters.
