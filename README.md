@@ -1,4 +1,8 @@
 # SSML Split
+[![Build Status](https://travis-ci.org/jvandenaardweg/ssml-split.svg?branch=master)](https://travis-ci.org/jvandenaardweg/ssml-split)
+[![Coverage Status](https://coveralls.io/repos/github/jvandenaardweg/ssml-split/badge.svg?branch=master)](https://coveralls.io/github/jvandenaardweg/ssml-split?branch=master)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+
 Splits SSML strings into batches AWS Polly ánd Google's Text to Speech API can consume.
 
 Based on [polly-ssml-split](https://github.com/oleglegun/polly-ssml-split) by [@oleglegun](https://github.com/oleglegun)
