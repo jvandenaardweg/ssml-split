@@ -19,13 +19,15 @@ With `includeSSMLTagsInCounter: true` it will be count as 31 characters, just li
 
 
 ### Usage:
-`npm install ssml-split --save`
+```
+npm install ssml-split --save
+```
 
 ```javascript
 const ssmlSplit = require('ssml-split')
 
 const options = {
-  softLimit: 4000, // Allow the splitter to find the correct split moment between 4000-5000 characters
+  softLimit: 2500, // Finds a possible split moment starting from 2500 characters
   hardLimit: 5000, // Google Text to Speech limitation
   includeSSMLTagsInCounter: true // Set true when using Google Text to Speech API, set to false with AWS Polly
 }
@@ -36,6 +38,27 @@ const batches = ssmlSplit.split('<speak>your long text here</speak>')
 ```
 
 [API Documentation](https://github.com/jvandenaardweg/ssml-split/blob/master/API.md)
+
+### Options
+#### AWS
+```javascript
+const options = {
+  softLimit: 1500,
+  hardLimit: 3000, // AWS Polly limitation
+  includeSSMLTagsInCounter: false
+}
+```
+
+#### Google
+```javascript
+const options = {
+  softLimit: 2500,
+  hardLimit: 5000, // Google Text to Speech API limitation
+  includeSSMLTagsInCounter: true
+}
+```
+
+You can tweak the `softLimit` to see what works for you. I suggest you keep the `hardLimit` at the limitation limit of the respective API.
 
 ## Why?
 AWS Polly just counts the characters between the SSML tags. Google's Text to Speech is a little bit different, it includes the SSML tag characters in the character count of the `5000` character limit. 
