@@ -1,5 +1,5 @@
 # SSML Split
-[![Build Status](https://travis-ci.org/jvandenaardweg/ssml-split.svg?branch=master)](https://travis-ci.org/jvandenaardweg/ssml-split)
+[![Build Status](https://img.shields.io/github/workflow/status/jvandenaardweg/ssml-split/Publish%20NPM%20Package)](https://github.com/jvandenaardweg/ssml-split/actions)
 [![Coverage Status](https://coveralls.io/repos/github/jvandenaardweg/ssml-split/badge.svg?branch=master)](https://coveralls.io/github/jvandenaardweg/ssml-split?branch=master)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
