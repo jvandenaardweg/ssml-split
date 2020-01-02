@@ -7,7 +7,7 @@ Splits SSML strings into batches AWS Polly ánd Google's Text to Speech API can 
 
 Based on [polly-ssml-split](https://github.com/oleglegun/polly-ssml-split) by [@oleglegun](https://github.com/oleglegun)
 
-## Changes in this package:
+## Changes compared to `polly-ssml-split`:
 Added `includeSSMLTagsInCounter: boolean` option to count characters based on the complete SSML tag and not just the included text characters.
 
 For example:
@@ -18,7 +18,7 @@ The default behaviour would count that as 9 characters, which is fine for AWS Po
 With `includeSSMLTagsInCounter: true` it will be count as 31 characters, just like Google's Text to Speech API counts it.
 
 
-### Usage:
+## Usage:
 ```
 npm install ssml-split --save
 ```
@@ -60,15 +60,15 @@ const options = {
 
 You can tweak the `softLimit` to see what works for you. I suggest you keep the `hardLimit` at the limitation limit of the respective API.
 
-### Why not just use `polly-ssml-split`?
-AWS Polly just counts the characters between the SSML tags. Google's Text to Speech is a little bit different, it includes the SSML tag characters in the character count of the `5000` character limit. 
+## About
+The [polly-ssml-split](https://github.com/oleglegun/polly-ssml-split) by [@oleglegun](https://github.com/oleglegun) library already handles splitting of SSML correctly for AWS Polly, but wasn't working properly for Google's Text to Speech. So I just modified the package to fit my needs.
 
-The `polly-ssml-split` library already handles splitting of SSML correctly for AWS Polly, but wasn't working properly for Google's Text to Speech.
-
-By adding the option `includeSSMLTags` to include the SSML tag characters in the calculation on when to split the SSML, makes the library also work with Google's Text to Speech API.
+By adding the option `includeSSMLTagsInCounter` to include the SSML tag characters in the calculation on when to split the SSML, makes the library also work with Google's Text to Speech API.
 
 This package should prevent you from seeing this error when using Google's Text to Speech API:
-`INVALID_ARGUMENT: 5000 characters limit exceeded.`
+```
+INVALID_ARGUMENT: 5000 characters limit exceeded.
+```
 
 ### Source
 
