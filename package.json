@@ -16,12 +16,18 @@
     "url": "git+https://github.com/jvandenaardweg/ssml-split.git"
   },
   "keywords": [
-    "polly",
-    "ssml split",
+    "ssml",
     "aws",
+    "google",
+    "google-text-to-speech",
+    "aws-polly",
+    "text-to-speech",
+    "split",
+    "splitter",
+    "ssml-parsing",
     "tts"
   ],
-  "author": "Oleg Legun <oleg.legun@gmail.com>",
+  "author": "Jordy van den Aardweg <jordyvandenaardweg@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/jvandenaardweg/ssml-split/issues"
