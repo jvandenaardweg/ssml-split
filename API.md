@@ -1,18 +1,18 @@
-<a name="PollySSMLSplit"></a>
+<a name="SSMLSplit"></a>
 
-## PollySSMLSplit
+## SSMLSplit
 Creates a tree data structure from SSML text.
 
 **Kind**: global class  
 
-* [PollySSMLSplit](#PollySSMLSplit)
-    * [new PollySSMLSplit(softLimit, hardLimit)](#new_PollySSMLSplit_new)
-    * [.configure(options)](#PollySSMLSplit+configure)
-    * [.split(ssml)](#PollySSMLSplit+split) ⇒ <code>Array.&lt;string&gt;</code>
+* [SSMLSplit](#SSMLSplit)
+    * [new SSMLSplit(softLimit, hardLimit)](#new_SSMLSplit_new)
+    * [.configure(options)](#SSMLSplit+configure)
+    * [.split(ssml)](#SSMLSplit+split) ⇒ <code>Array.&lt;string&gt;</code>
 
-<a name="new_PollySSMLSplit_new"></a>
+<a name="new_SSMLSplit_new"></a>
 
-### new PollySSMLSplit(softLimit, hardLimit)
+### new SSMLSplit(softLimit, hardLimit)
 Set default character limits.
 Initialize tree.
 
@@ -22,15 +22,15 @@ Initialize tree.
 | softLimit | <code>number</code> | 
 | hardLimit | <code>number</code> | 
 
-<a name="PollySSMLSplit+configure"></a>
+<a name="SSMLSplit+configure"></a>
 
-### pollySSMLSplit.configure(options)
+### SSMLSplit.configure(options)
 Set configuration options.
 This is optional. Default options are perfect for working with AWS Polly TTS.
 Notice that `softLimit` and `hardLimit` count only text characters, not SSML tags.
 AWS Polly ignores SSML tags length, only text characters matter.
 
-**Kind**: instance method of [<code>PollySSMLSplit</code>](#PollySSMLSplit)  
+**Kind**: instance method of [<code>SSMLSplit</code>](#SSMLSplit)  
 **Throws**:
 
 - <code>ConfigurationValidationError</code> Argument `options` is not valid.
@@ -43,12 +43,12 @@ AWS Polly ignores SSML tags length, only text characters matter.
 | options.hardLimit | <code>number</code> | <code>1500</code> | Limit of a max possible batch size. |
 | [options.extraSplitChars] | <code>string</code> | <code>&quot;,;&quot;</code> | String with characters, that can be used as split markers for plain text. Optional parameter. |
 
-<a name="PollySSMLSplit+split"></a>
+<a name="SSMLSplit+split"></a>
 
-### pollySSMLSplit.split(ssml) ⇒ <code>Array.&lt;string&gt;</code>
+### SSMLSplit.split(ssml) ⇒ <code>Array.&lt;string&gt;</code>
 Split SSML text by batches of ~1500 (by default) chars.
 
-**Kind**: instance method of [<code>PollySSMLSplit</code>](#PollySSMLSplit)  
+**Kind**: instance method of [<code>SSMLSplit</code>](#SSMLSplit)  
 **Returns**: <code>Array.&lt;string&gt;</code> - Array of valid SSML strings.  
 **Throws**:
 

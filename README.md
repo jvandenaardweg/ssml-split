@@ -31,7 +31,7 @@ ssmlSplit.configure(options)
 const batches = ssmlSplit.split('<speak>your long text here</speak>')
 ```
 
-For other documentation, please check the original repo: https://github.com/oleglegun/polly-ssml-split
+[API Documentation](https://github.com/jvandenaardweg/ssml-split/blob/master/API.md)
 
 ## Why?
 AWS Polly just counts the characters between the SSML tags. Google's Text to Speech is a little bit different, it includes the SSML tag characters in the character count of the `5000` character limit. 
