@@ -10,7 +10,7 @@
     "test": "tap test/*.js",
     "cover": "tap test/*.js --coverage",
     "update": "npm-check --update",
-    "release": "release-it --no-npm.publish"
+    "release": "release-it --no-npm.publish --git.tagName='v${version}'"
   },
   "release-it": {
     "hooks": {
