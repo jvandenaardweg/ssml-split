@@ -1,4 +1,4 @@
-name: Publish
+name: Publish NPM Package
 
 on:
   push:
@@ -7,6 +7,7 @@ on:
 
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -17,7 +18,7 @@ jobs:
       - run: npm test
 
   publish-npm:
-    name: Publish NPM
+    name: Publish to NPM
     needs: build
     runs-on: ubuntu-latest
     steps:
