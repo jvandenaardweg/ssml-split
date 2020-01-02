@@ -1,1 +1,1 @@
-module.exports = require('./lib/polly-ssml-split')
+module.exports = require('./lib/ssml-split')
