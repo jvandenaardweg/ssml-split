@@ -39,14 +39,14 @@ AWS Polly ignores SSML tags length, only text characters matter.
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | options | <code>Object</code> |  | Object with configuration options. |
-| options.softLimit | <code>number</code> | <code>1000</code> | Limit of a min batch size. |
-| options.hardLimit | <code>number</code> | <code>1500</code> | Limit of a max possible batch size. |
+| options.softLimit | <code>number</code> | <code>1500</code> | Limit of a min batch size. |
+| options.hardLimit | <code>number</code> | <code>3000</code> | Limit of a max possible batch size. |
 | [options.extraSplitChars] | <code>string</code> | <code>&quot;,;&quot;</code> | String with characters, that can be used as split markers for plain text. Optional parameter. |
 
 <a name="SSMLSplit+split"></a>
 
 ### SSMLSplit.split(ssml) ⇒ <code>Array.&lt;string&gt;</code>
-Split SSML text by batches of ~1500 (by default) chars.
+Split SSML text by batches of ~3000 (by default) chars.
 
 **Kind**: instance method of [<code>SSMLSplit</code>](#SSMLSplit)  
 **Returns**: <code>Array.&lt;string&gt;</code> - Array of valid SSML strings.  
