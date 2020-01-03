@@ -229,6 +229,25 @@ describe('split', () => {
 
     expect(ssmlSplit.split(ssml)).toStrictEqual(expected);
   });
+
+  it('Should return correct SSML when using mixed SSML tags', () => {
+    const ssml = '<speak>Here is a number spoken as a cardinal number: <say-as interpret-as="cardinal">12345</say-as>. Here is the same number with each digit spoken separately: <say-as interpret-as="digits">12345</say-as>. Here is a word spelled out: <say-as interpret-as="spell-out">hello</say-as></speak>'
+    const expected = [
+      '<speak>Here is a number spoken as a </speak>',
+      '<speak>cardinal number: <say-as interpret-as="cardinal">12345</say-as></speak>',
+      '<speak>. Here is the same number with </speak>',
+      '<speak>each digit spoken separately: </speak>',
+      '<speak><say-as interpret-as="digits">12345</say-as>. Here is a word spelled </speak>',
+      '<speak>out: <say-as interpret-as="spell-out">hello</say-as></speak>',
+    ];
+
+    ssmlSplit.configure({
+      softLimit: 20,
+      hardLimit: 30,
+    });
+
+    expect(ssmlSplit.split(ssml)).toStrictEqual(expected);
+  });
 });
 
 describe('Google Text to Speech API limitations', () => {
