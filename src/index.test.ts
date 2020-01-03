@@ -1,9 +1,10 @@
-const ssmlSplit = require('../lib/ssml-split')
+import ssmlSplit from "./index";
 
 describe('configure', () => {
 
   it('Should return an error when options is missing', () => {
     try {
+      // @ts-ignore
       ssmlSplit.configure();
     } catch (err) {
       expect(err.message).toBe('Parameter `options` is missing.');

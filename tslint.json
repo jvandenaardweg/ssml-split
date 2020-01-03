@@ -1,0 +1,17 @@
+{
+  "extends": [
+    "tslint:latest",
+    "tslint-config-prettier"
+  ],
+  "rules": {
+    "trailing-comma": false,
+    "max-line-length": [false, 200],
+    "import-name": false,
+    "align": false,
+    "object-literal-sort-keys": false,
+    "no-namespace": false,
+    "no-string-literal": false,
+    "interface-name": false,
+    "member-access": false
+  }
+}
