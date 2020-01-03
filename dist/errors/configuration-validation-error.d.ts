@@ -1,3 +1,3 @@
 export declare class ConfigurationValidationError extends Error {
-    constructor(message: any);
+    constructor(message: string);
 }

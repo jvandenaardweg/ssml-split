@@ -1,21 +1,30 @@
-declare const _splitTextNode: unique symbol;
-declare const _noChildrenNodeToText: unique symbol;
-declare const _sanitize: unique symbol;
-declare const _traverseNode: unique symbol;
-declare const _makeSpeakBatch: unique symbol;
-declare const _addNode: unique symbol;
-declare const _buildTree: unique symbol;
-declare class SSMLSplit {
-    constructor(softLimit: any, hardLimit: any);
-    configure(options: any): void;
-    split(ssml: any): any;
-    [_sanitize](ssml: any): any;
-    [_traverseNode](currentNode: any): void;
-    [_splitTextNode](node: any): void;
-    [_noChildrenNodeToText](node: any): any;
-    [_makeSpeakBatch](ssml: any): void;
-    [_addNode](parentNode: any, newNode: any): void;
-    [_buildTree](ssml: any): void;
+interface OptionsInput {
+    hardLimit?: number;
+    softLimit?: number;
+    includeSSMLTagsInCounter?: boolean;
+    extraSplitChars?: string;
 }
-declare const _default: SSMLSplit;
-export default _default;
+interface Options {
+    hardLimit: number;
+    softLimit: number;
+    includeSSMLTagsInCounter: boolean;
+    extraSplitChars: string;
+}
+export declare class SSMLSplit {
+    options: Options;
+    private root;
+    private batches;
+    private accumulatedSSML;
+    private textLength;
+    private characterCounter;
+    constructor(options?: OptionsInput);
+    split(ssml: string): string[];
+    private sanitize;
+    private traverseNode;
+    private splitTextNode;
+    private noChildrenNodeToText;
+    private makeSpeakBatch;
+    private addNode;
+    private buildTree;
+}
+export default SSMLSplit;
