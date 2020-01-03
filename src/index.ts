@@ -35,7 +35,7 @@ export class SSMLSplit {
   public options: Options;
 
   private root: RootNode;
-  private batches: string[] = [];
+  private batches: string[];
   private accumulatedSSML: string;
   private textLength: number;
   private characterCounter: number;
@@ -52,6 +52,9 @@ export class SSMLSplit {
     };
 
     this.batches = [];
+    this.accumulatedSSML = '';
+    this.textLength = 0;
+    this.characterCounter = 0;
 
     this.options = {
       softLimit: options && options.softLimit || SOFT_LIMIT,
