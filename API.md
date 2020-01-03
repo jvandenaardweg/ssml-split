@@ -6,34 +6,14 @@ Creates a tree data structure from SSML text.
 **Kind**: global class  
 
 * [SSMLSplit](#SSMLSplit)
-    * [new SSMLSplit(softLimit, hardLimit)](#new_SSMLSplit_new)
-    * [.configure(options)](#SSMLSplit+configure)
+    * [new SSMLSplit(options)](#new_SSMLSplit_new)
     * [.split(ssml)](#SSMLSplit+split) ⇒ <code>Array.&lt;string&gt;</code>
 
 <a name="new_SSMLSplit_new"></a>
 
-### new SSMLSplit(softLimit, hardLimit)
+### new SSMLSplit(options)
 Set default character limits.
 Initialize tree.
-
-
-| Param | Type |
-| --- | --- |
-| softLimit | <code>number</code> | 
-| hardLimit | <code>number</code> | 
-
-<a name="SSMLSplit+configure"></a>
-
-### SSMLSplit.configure(options)
-Set configuration options.
-This is optional. Default options are perfect for working with AWS Polly TTS.
-Notice that `softLimit` and `hardLimit` count only text characters, not SSML tags.
-AWS Polly ignores SSML tags length, only text characters matter.
-
-**Kind**: instance method of [<code>SSMLSplit</code>](#SSMLSplit)  
-**Throws**:
-
-- <code>ConfigurationValidationError</code> Argument `options` is not valid.
 
 
 | Param | Type | Default | Description |
@@ -41,7 +21,8 @@ AWS Polly ignores SSML tags length, only text characters matter.
 | options | <code>Object</code> |  | Object with configuration options. |
 | options.softLimit | <code>number</code> | <code>1500</code> | Limit of a min batch size. |
 | options.hardLimit | <code>number</code> | <code>3000</code> | Limit of a max possible batch size. |
-| [options.extraSplitChars] | <code>string</code> | <code>&quot;,;&quot;</code> | String with characters, that can be used as split markers for plain text. Optional parameter. |
+| options.extraSplitChars | <code>string</code> | <code>&quot;,;&quot;</code> | String with characters, that can be used as split markers for plain text. Optional parameter. |
+| options.includeSSMLTagsInCounter | <code>boolean</code> | <code>false</code> | Set true to include ssml tag characters in the counting
 
 <a name="SSMLSplit+split"></a>
 

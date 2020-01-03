@@ -7,8 +7,10 @@ Splits SSML strings into batches AWS Polly ánd Google's Text to Speech API can 
 
 Based on [polly-ssml-split](https://github.com/oleglegun/polly-ssml-split) by [@oleglegun](https://github.com/oleglegun)
 
-## Changes compared to `polly-ssml-split`:
-Added `includeSSMLTagsInCounter: boolean` option to count characters based on the complete SSML tag and not just the included text characters.
+## About
+The [polly-ssml-split](https://github.com/oleglegun/polly-ssml-split) by [@oleglegun](https://github.com/oleglegun) library already handles splitting of SSML correctly for AWS Polly, but wasn't working properly for Google's Text to Speech. So I just modified the package to fit my needs.
+
+By adding the option `includeSSMLTagsInCounter` to include the SSML tag characters in the calculation on when to split the SSML, makes the library also work with Google's Text to Speech API.
 
 For example:
 `<speak><p>some text</p></speak>`
@@ -17,6 +19,17 @@ The default behaviour would count that as 9 characters, which is fine for AWS Po
 
 With `includeSSMLTagsInCounter: true` it will be count as 31 characters, just like Google's Text to Speech API counts it.
 
+This package should prevent you from seeing this error when using Google's Text to Speech API:
+
+```
+INVALID_ARGUMENT: 5000 characters limit exceeded.
+```
+
+### Changes compared to `polly-ssml-split`:
+- Added `includeSSMLTagsInCounter` option to count characters based on the complete SSML tag and not just the included text characters.
+- Rewrote the library to use Typescript, so you get correct type checking in your Typescript project.
+- Removed the `.configure` method and use the class constructor method for it instead.
+- Added more tests using Jest.
 
 ## Usage:
 ```
@@ -24,17 +37,15 @@ npm install ssml-split --save
 ```
 
 ```javascript
-const ssmlSplit = require('ssml-split')
+import SSMLSplit from 'ssml-split';
 
-const options = {
+const ssmlSplit = new SSMLSplit({
   softLimit: 2500, // Finds a possible split moment starting from 2500 characters
   hardLimit: 5000, // Google Text to Speech limitation
   includeSSMLTagsInCounter: true // Set true when using Google Text to Speech API, set to false with AWS Polly
-}
+});
 
-ssmlSplit.configure(options)
-
-const batches = ssmlSplit.split('<speak>your long text here</speak>')
+const batches = ssmlSplit.split('<speak>your long text here</speak>');
 ```
 
 [API Documentation](https://github.com/jvandenaardweg/ssml-split/blob/master/API.md)
@@ -42,33 +53,25 @@ const batches = ssmlSplit.split('<speak>your long text here</speak>')
 ### Options
 #### AWS
 ```javascript
-const options = {
+new SSMLSplit({
   softLimit: 1500,
   hardLimit: 3000, // AWS Polly limitation
   includeSSMLTagsInCounter: false
-}
+})
 ```
 
 #### Google
 ```javascript
-const options = {
+new SSMLSplit({
   softLimit: 2500,
   hardLimit: 5000, // Google Text to Speech API limitation
   includeSSMLTagsInCounter: true
-}
+})
 ```
 
 You can tweak the `softLimit` to see what works for you. I suggest you keep the `hardLimit` at the limitation limit of the respective API.
 
-## About
-The [polly-ssml-split](https://github.com/oleglegun/polly-ssml-split) by [@oleglegun](https://github.com/oleglegun) library already handles splitting of SSML correctly for AWS Polly, but wasn't working properly for Google's Text to Speech. So I just modified the package to fit my needs.
 
-By adding the option `includeSSMLTagsInCounter` to include the SSML tag characters in the calculation on when to split the SSML, makes the library also work with Google's Text to Speech API.
-
-This package should prevent you from seeing this error when using Google's Text to Speech API:
-```
-INVALID_ARGUMENT: 5000 characters limit exceeded.
-```
 
 ### Source
 
