@@ -1,6 +1,6 @@
-import pollyTextSplit from "polly-text-split";
-import defaults from "./defaults";
-import { ConfigurationValidationError, NotPossibleSplitError, SSMLParseError } from "./errors";
+import pollyTextSplit from 'polly-text-split';
+import defaults from './defaults';
+import { ConfigurationValidationError, NotPossibleSplitError, SSMLParseError } from './errors';
 
 interface OptionsInput {
   hardLimit?: number;
@@ -42,13 +42,13 @@ export class SSMLSplit {
   private characterCounter: number;
 
   constructor(options?: OptionsInput) {
-    if (options && typeof options !== "object") {
-      throw new ConfigurationValidationError("Parameter `options` must be an object.");
+    if (options && typeof options !== 'object') {
+      throw new ConfigurationValidationError('Parameter `options` must be an object.');
     }
 
     this.root = {
       parentNode: null,
-      type: "root",
+      type: 'root',
       children: [],
       value: ''
     };
@@ -82,16 +82,18 @@ export class SSMLSplit {
     this.buildTree(this.sanitize(ssml));
 
     // check if SSML is wrapped with <speak> tag
-    if (this.root.children.length === 1 && this.root.children[0].type === "speak") {
+    if (this.root.children.length === 1 && this.root.children[0].type === 'speak') {
       // remove global <speak> tag node
       // since the text will be split, new <speak> tags will wrap batches
       this.root.children = this.root.children[0].children!;
     }
 
-    this.accumulatedSSML = "";
+    this.accumulatedSSML = '';
     this.textLength = 0;
 
-    if (this.root.children.length === 0) { return this.batches; }
+    if (this.root.children.length === 0) {
+      return this.batches;
+    }
 
     // start traversing root children
     this.root.children.forEach((node) => {
@@ -102,7 +104,7 @@ export class SSMLSplit {
         // Text node on the top level can be too long and become > SOFT_LIMIT and even HARD_LIMIT
         // So we need to explicitly check for overflow here
         if (
-          node.type === "TEXT" &&
+          node.type === 'TEXT' &&
           this.textLength + node.value.length > this.options.softLimit
         ) {
           this.splitTextNode(node);
@@ -113,17 +115,17 @@ export class SSMLSplit {
       } else if (this.characterCounter < this.options.hardLimit) {
         // SOFT_LIMIT is reached -> search for possible split locations
         this.makeSpeakBatch(this.accumulatedSSML);
-        this.accumulatedSSML = "";
+        this.accumulatedSSML = '';
         this.textLength = 0;
 
-        if (node.type === "TEXT" && node.value.length > this.options.softLimit) {
+        if (node.type === 'TEXT' && node.value.length > this.options.softLimit) {
           this.splitTextNode(node);
         } else {
           // Text node is short or this is a tag node, that needs to be traversed, can't split here
           this.traverseNode(node);
         }
       } else {
-        throw new NotPossibleSplitError("SSML tag appeared to be too long.");
+        throw new NotPossibleSplitError('SSML tag appeared to be too long.');
       }
     });
 
@@ -134,7 +136,7 @@ export class SSMLSplit {
       if (this.characterCounter < this.options.hardLimit) {
         this.makeSpeakBatch(this.accumulatedSSML);
       } else {
-        throw new NotPossibleSplitError("Last SSML tag appeared to be too long.");
+        throw new NotPossibleSplitError('Last SSML tag appeared to be too long.');
       }
     }
 
@@ -142,13 +144,13 @@ export class SSMLSplit {
   }
 
   private sanitize(ssml: string): string {
-    return ssml.split("\n").join(" ");
+    return ssml.split('\n').join(' ');
   }
 
-  private traverseNode(currentNode: Node) {
+  private traverseNode(currentNode: Node): void {
     // check if node has children to check out too
     if (currentNode.children) {
-      if (currentNode.type !== "root") {
+      if (currentNode.type !== 'root') {
         // open tag
         this.accumulatedSSML += `<${currentNode.type}${currentNode.value}>`;
       }
@@ -196,13 +198,13 @@ export class SSMLSplit {
         this.makeSpeakBatch(text);
       });
 
-      this.accumulatedSSML = "";
+      this.accumulatedSSML = '';
       this.textLength = 0;
     }
   }
 
   private noChildrenNodeToText(node: Node): string {
-    if (node.type === "TEXT") {
+    if (node.type === 'TEXT') {
       this.textLength += node.value.length;
       return node.value;
     } else {
@@ -236,13 +238,13 @@ export class SSMLSplit {
     // remove extra space if needed
     ssml = ssml.trim();
 
-    let text = "";
+    let text = '';
     let textHasStarted = false;
     let currentNode = this.root;
 
     for (let i = 0, len = ssml.length; i < len; i++) {
       // check if the char is a plain text or SSML tag
-      if (ssml[i] === "<") {
+      if (ssml[i] === '<') {
         /*
          * 1. SSML tag
          */
@@ -253,7 +255,7 @@ export class SSMLSplit {
 
           const newNode: Node = {
             parentNode: currentNode,
-            type: "TEXT",
+            type: 'TEXT',
             value: text,
           };
 
@@ -261,8 +263,8 @@ export class SSMLSplit {
         }
 
         // type and value/attributes of parsed SSML tag
-        let type = "";
-        let value = ""; // can be blank, like <tag /> or <tag></tag>
+        let type = '';
+        let value = ''; // can be blank, like <tag /> or <tag></tag>
 
         let isEndTag = false; // flag for end tag (</tag>)
         let isEmptyTag = false; // flag for empty tag (<tag />)
@@ -271,14 +273,14 @@ export class SSMLSplit {
         let j = i + 1;
 
         // check if it is an end tag (no value)
-        if (ssml[j] === "/") {
+        if (ssml[j] === '/') {
           isEndTag = true;
 
           // start from the next char
           j++;
 
           // parse only type
-          while (ssml[j] !== ">") {
+          while (ssml[j] !== '>') {
             type += ssml[j];
             j++;
           }
@@ -289,17 +291,17 @@ export class SSMLSplit {
            *  '>' - is start tag marker
            *  '/' - is empty tag marker
            */
-          while (ssml[j] !== " " && ssml[j] !== ">" && ssml[j] !== "/") {
+          while (ssml[j] !== ' ' && ssml[j] !== '>' && ssml[j] !== '/') {
             type += ssml[j];
             j++;
           }
 
           // 2. Parse value
           while (true) {
-            if (ssml[j] !== ">") {
+            if (ssml[j] !== '>') {
               // A. value continues -> accumulate value
               value += ssml[j];
-            } else if (ssml[j - 1] === "/") {
+            } else if (ssml[j - 1] === '/') {
               // B. empty tag <tag />
               isEmptyTag = true;
 
@@ -361,7 +363,7 @@ export class SSMLSplit {
          */
         if (!textHasStarted) {
           textHasStarted = true;
-          text = "";
+          text = '';
         }
 
         // accumulate characters
@@ -371,7 +373,7 @@ export class SSMLSplit {
           // ssml ends with plain text => create node
           const newNode: Node = {
             parentNode: currentNode,
-            type: "TEXT",
+            type: 'TEXT',
             value: text,
           };
 

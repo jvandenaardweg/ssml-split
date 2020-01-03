@@ -1,5 +1,5 @@
-import defaults from "./defaults";
-import SSMLSplit from "./index";
+import defaults from './defaults';
+import SSMLSplit from './index';
 
 describe('configure', () => {
 
