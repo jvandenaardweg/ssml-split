@@ -1,5 +1,5 @@
 import pollyTextSplit from "polly-text-split";
-import { HARD_LIMIT, SOFT_LIMIT } from "./defaults";
+import { EXTRA_SPLIT_CHARS, HARD_LIMIT, INCLUDE_SSML_TAGS_IN_COUNTER, SOFT_LIMIT } from "./defaults";
 import { ConfigurationValidationError, NotPossibleSplitError, SSMLParseError } from "./errors";
 
 interface OptionsInput {
@@ -7,6 +7,13 @@ interface OptionsInput {
   softLimit?: number;
   includeSSMLTagsInCounter?: boolean;
   extraSplitChars?: string;
+}
+
+interface Options {
+  hardLimit: number;
+  softLimit: number;
+  includeSSMLTagsInCounter: boolean;
+  extraSplitChars: string;
 }
 
 interface RootNode {
@@ -23,20 +30,21 @@ interface ChildNode extends RootNode {
  * Creates a tree data structure from SSML text.
  * @class
  */
-class SSMLSplit {
+export class SSMLSplit {
   // Make config properties public, so we can unit test it
-  public softLimit: number;
-  public hardLimit: number;
-  public extraSplitChars: string;
-  public includeSSMLTagsInCounter: boolean;
+  public options: Options;
 
   private root: RootNode;
-  private batches: string[];
+  private batches: string[] = [];
   private accumulatedSSML: string;
   private textLength: number;
   private characterCounter: number;
 
-  constructor(softLimit: number, hardLimit: number) {
+  constructor(options?: OptionsInput) {
+    if (options && typeof options !== "object") {
+      throw new ConfigurationValidationError("Parameter `options` must be an object.");
+    }
+
     this.root = {
       parentNode: null,
       type: "root",
@@ -45,29 +53,12 @@ class SSMLSplit {
 
     this.batches = [];
 
-    this.softLimit = softLimit;
-
-    this.hardLimit = hardLimit;
-  }
-
-  public configure(options: OptionsInput): void {
-    if (!options) {
-      throw new ConfigurationValidationError("Parameter `options` is missing.");
-    }
-
-    if (typeof options !== "object") {
-      throw new ConfigurationValidationError("Parameter `options` must be an object.");
-    }
-
-    this.softLimit = options.softLimit || SOFT_LIMIT;
-    this.hardLimit = options.hardLimit || HARD_LIMIT;
-
-    // true if you want the complete SSML tag characters to be included in the split count (required for Google TTS)
-    this.includeSSMLTagsInCounter = options.includeSSMLTagsInCounter || false;
-
-    if (options.extraSplitChars && typeof options.extraSplitChars === "string") {
-      this.extraSplitChars = options.extraSplitChars;
-    }
+    this.options = {
+      softLimit: options && options.softLimit || SOFT_LIMIT,
+      hardLimit: options && options.hardLimit || HARD_LIMIT,
+      includeSSMLTagsInCounter: options && options.includeSSMLTagsInCounter ||  INCLUDE_SSML_TAGS_IN_COUNTER,
+      extraSplitChars: options && options.extraSplitChars || EXTRA_SPLIT_CHARS
+    };
   }
 
   /**
@@ -99,28 +90,28 @@ class SSMLSplit {
 
     // start traversing root children
     this.root.children.forEach((node) => {
-      this.characterCounter = this.includeSSMLTagsInCounter ? this.accumulatedSSML.length : this.textLength;
+      this.characterCounter = this.options.includeSSMLTagsInCounter ? this.accumulatedSSML.length : this.textLength;
 
       // root level - can make splits here
-      if (this.characterCounter < this.softLimit) {
+      if (this.characterCounter < this.options.softLimit) {
         // Text node on the top level can be too long and become > SOFT_LIMIT and even HARD_LIMIT
         // So we need to explicitly check for overflow here
         if (
           node.type === "TEXT" &&
-          this.textLength + node.value.length > this.softLimit
+          this.textLength + node.value.length > this.options.softLimit
         ) {
           this.splitTextNode(node);
         } else {
           // Text node is short or this is a tag node, that needs to be traversed, can't split here
           this.traverseNode(node);
         }
-      } else if (this.characterCounter < this.hardLimit) {
+      } else if (this.characterCounter < this.options.hardLimit) {
         // SOFT_LIMIT is reached -> search for possible split locations
         this.makeSpeakBatch(this.accumulatedSSML);
         this.accumulatedSSML = "";
         this.textLength = 0;
 
-        if (node.type === "TEXT" && node.value.length > this.softLimit) {
+        if (node.type === "TEXT" && node.value.length > this.options.softLimit) {
           this.splitTextNode(node);
         } else {
           // Text node is short or this is a tag node, that needs to be traversed, can't split here
@@ -132,10 +123,10 @@ class SSMLSplit {
     });
 
     // Process the last part
-    this.characterCounter = this.includeSSMLTagsInCounter ? this.accumulatedSSML.length : this.textLength;
+    this.characterCounter = this.options.includeSSMLTagsInCounter ? this.accumulatedSSML.length : this.textLength;
 
     if (this.characterCounter !== 0) {
-      if (this.characterCounter < this.hardLimit) {
+      if (this.characterCounter < this.options.hardLimit) {
         this.makeSpeakBatch(this.accumulatedSSML);
       } else {
         throw new NotPossibleSplitError("Last SSML tag appeared to be too long.");
@@ -171,13 +162,13 @@ class SSMLSplit {
   private splitTextNode(node: any): void {
     // Overflows => Text node needs to be checked for possible split location
     const localSoftLimit =
-      this.textLength === 0 ? this.softLimit : this.softLimit - this.textLength;
-    const localHardLimit = localSoftLimit + this.hardLimit - this.softLimit;
+      this.textLength === 0 ? this.options.softLimit : this.options.softLimit - this.textLength;
+    const localHardLimit = localSoftLimit + this.options.hardLimit - this.options.softLimit;
 
     pollyTextSplit.configure({
       hardLimit: localHardLimit,
       softLimit: localSoftLimit,
-      extraSplitChars: this.extraSplitChars ? this.extraSplitChars : undefined,
+      extraSplitChars: this.options.extraSplitChars ? this.options.extraSplitChars : undefined,
     });
 
     const splitIndex = pollyTextSplit.splitIndex(node.value);
@@ -188,11 +179,11 @@ class SSMLSplit {
     this.textLength = this.accumulatedSSML.length;
 
     // If the remaining TEXT value is too long again, split it
-    if (this.textLength > this.softLimit) {
+    if (this.textLength > this.options.softLimit) {
       pollyTextSplit.configure({
-        hardLimit: this.hardLimit,
-        softLimit: this.softLimit,
-        extraSplitChars: this.extraSplitChars ? this.extraSplitChars : undefined,
+        hardLimit: this.options.hardLimit,
+        softLimit: this.options.softLimit,
+        extraSplitChars: this.options.extraSplitChars ? this.options.extraSplitChars : undefined,
       });
 
       // Get text batches
@@ -386,4 +377,4 @@ class SSMLSplit {
   }
 }
 
-export default new SSMLSplit(SOFT_LIMIT, HARD_LIMIT);
+export default SSMLSplit;

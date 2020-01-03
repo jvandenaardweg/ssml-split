@@ -1,63 +1,63 @@
-import ssmlSplit from "./index";
+import SSMLSplit from "./index";
+import { EXTRA_SPLIT_CHARS, HARD_LIMIT, SOFT_LIMIT, INCLUDE_SSML_TAGS_IN_COUNTER } from "./defaults";
 
 describe('configure', () => {
 
-  it('Should return an error when options is missing', () => {
-    try {
-      // @ts-ignore
-      ssmlSplit.configure();
-    } catch (err) {
-      expect(err.message).toBe('Parameter `options` is missing.');
-    }
+  it('Should set default options when no options object is given', () => {
+    const ssmlSplit = new SSMLSplit()
+    expect(ssmlSplit.options.extraSplitChars).toBe(EXTRA_SPLIT_CHARS);
+    expect(ssmlSplit.options.hardLimit).toBe(HARD_LIMIT);
+    expect(ssmlSplit.options.softLimit).toBe(SOFT_LIMIT);
+    expect(ssmlSplit.options.includeSSMLTagsInCounter).toBe(INCLUDE_SSML_TAGS_IN_COUNTER);
   });
 
   it('Should return an error when options is not an object', () => {
     try {
       // @ts-ignore
-      ssmlSplit.configure(1);
+      const ssmlSplit = new SSMLSplit(1)
     } catch (err) {
       expect(err.message).toBe('Parameter `options` must be an object.');
     }
   });
 
   it('Should return 5 when "softLimit: 5" is given as an option', () => {
-    ssmlSplit.configure({
+    const ssmlSplit = new SSMLSplit({
       softLimit: 5
-    });
+    })
 
-    expect(ssmlSplit.softLimit).toBe(5);
+    expect(ssmlSplit.options.softLimit).toBe(5);
   });
 
   it('Should return 10 when "hardLimit: 10" is given as an option', () => {
-    ssmlSplit.configure({
+    const ssmlSplit = new SSMLSplit({
       hardLimit: 10
-    });
+    })
 
-    expect(ssmlSplit.hardLimit).toBe(10);
+    expect(ssmlSplit.options.hardLimit).toBe(10);
   });
 
   it('Should return true when "includeSSMLTagsInCounter: false" is given as an option', () => {
-    ssmlSplit.configure({
+    const ssmlSplit = new SSMLSplit({
       includeSSMLTagsInCounter: false
-    });
+    })
 
-    expect(ssmlSplit.includeSSMLTagsInCounter).toBe(false);
+    expect(ssmlSplit.options.includeSSMLTagsInCounter).toBe(false);
   });
 
   it('Should return true when "includeSSMLTagsInCounter: true" is given as an option', () => {
-    ssmlSplit.configure({
+    const ssmlSplit = new SSMLSplit({
       includeSSMLTagsInCounter: true
-    });
+    })
 
-    expect(ssmlSplit.includeSSMLTagsInCounter).toBe(true);
+    expect(ssmlSplit.options.includeSSMLTagsInCounter).toBe(true);
   });
 
   it('Should return "/" when "extraSplitChars: \'/\'" is given as an option', () => {
-    ssmlSplit.configure({
+    const ssmlSplit = new SSMLSplit({
       extraSplitChars: '/'
-    });
+    })
 
-    expect(ssmlSplit.extraSplitChars).toBe('/');
+    expect(ssmlSplit.options.extraSplitChars).toBe('/');
   });
 });
 
@@ -67,7 +67,7 @@ describe('split', () => {
     const ssml = '';
     const expected = [];
 
-    ssmlSplit.configure({});
+    const ssmlSplit = new SSMLSplit();
 
     const result = ssmlSplit.split(ssml);
 
@@ -78,7 +78,7 @@ describe('split', () => {
     const ssml = '';
     const expected = [];
 
-    ssmlSplit.configure({
+    const ssmlSplit = new SSMLSplit({
       softLimit: 5,
       hardLimit: 10
     });
@@ -92,10 +92,10 @@ describe('split', () => {
     const ssml = '';
     const expected = [];
 
-    ssmlSplit.configure({
+    const ssmlSplit = new SSMLSplit({
       softLimit: 5,
       hardLimit: 10,
-    });
+    })
 
     const result = ssmlSplit.split(ssml);
 
@@ -106,10 +106,10 @@ describe('split', () => {
     const ssml = 'Hello';
     const expected = ['<speak>Hello</speak>'];
 
-    ssmlSplit.configure({
+    const ssmlSplit = new SSMLSplit({
       softLimit: 5,
       hardLimit: 10,
-    });
+    })
 
     const result = ssmlSplit.split(ssml);
 
@@ -124,10 +124,10 @@ describe('split', () => {
       '<speak> plain text</speak>',
     ];
 
-    ssmlSplit.configure({
+    const ssmlSplit = new SSMLSplit({
       softLimit: 5,
       hardLimit: 15,
-    });
+    })
 
     const result = ssmlSplit.split(ssml);
 
@@ -145,10 +145,10 @@ describe('split', () => {
       '<speak><sub alias="magnesium">Mg</sub>.</speak>',
     ];
 
-    ssmlSplit.configure({
+    const ssmlSplit = new SSMLSplit({
       softLimit: 5,
       hardLimit: 15,
-    });
+    })
 
     const result = ssmlSplit.split(ssml);
 
@@ -163,10 +163,10 @@ describe('split', () => {
       '<speak> Can you believe it?</speak>',
     ];
 
-    ssmlSplit.configure({
+    const ssmlSplit = new SSMLSplit({
       softLimit: 20,
       hardLimit: 30,
-    });
+    })
 
     const result = ssmlSplit.split(ssml);
 
@@ -176,10 +176,10 @@ describe('split', () => {
   it('Should return an error when SSML tag is too long to split', () => {
     const ssml = '<speak><p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. </p></speak>';
 
-    ssmlSplit.configure({
+    const ssmlSplit = new SSMLSplit({
       softLimit: 20,
       hardLimit: 30,
-    });
+    })
 
     try {
       ssmlSplit.split(ssml)
@@ -191,10 +191,10 @@ describe('split', () => {
   it('Should return an error when SSML tag is too long to split', () => {
     const ssml = '<speak><p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p><p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. </p></speak>';
 
-    ssmlSplit.configure({
+    const ssmlSplit = new SSMLSplit({
       softLimit: 20,
       hardLimit: 30,
-    });
+    })
 
     try {
       ssmlSplit.split(ssml)
@@ -206,10 +206,10 @@ describe('split', () => {
   it('Should return an error when SSML tag is invalid', () => {
     const ssml = '<speak><Lorem ipsum dolor sit amet></speak>';
 
-    ssmlSplit.configure({
+    const ssmlSplit = new SSMLSplit({
       softLimit: 20,
       hardLimit: 30,
-    });
+    })
 
     try {
       ssmlSplit.split(ssml)
@@ -224,10 +224,10 @@ describe('split', () => {
       '<speak><break strength="x-strong" /><p>Lorem ipsum dolor sit amet</p></speak>'
     ];
 
-    ssmlSplit.configure({
+    const ssmlSplit = new SSMLSplit({
       softLimit: 20,
       hardLimit: 30,
-    });
+    })
 
     expect(ssmlSplit.split(ssml)).toStrictEqual(expected);
   });
@@ -243,10 +243,10 @@ describe('split', () => {
       '<speak>out: <say-as interpret-as="spell-out">hello</say-as></speak>',
     ];
 
-    ssmlSplit.configure({
+    const ssmlSplit = new SSMLSplit({
       softLimit: 20,
       hardLimit: 30,
-    });
+    })
 
     expect(ssmlSplit.split(ssml)).toStrictEqual(expected);
   });
@@ -275,11 +275,11 @@ describe('Google Text to Speech API limitations', () => {
       '<speak><p>Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed aliquam, nisi quis porttitor congue, elit erat euismod orci, ac placerat dolor lectus quis orci. Phasellus consectetuer vestibulum elit. Aenean tellus metus, bibendum sed, posuere ac, mattis non, nunc. Vestibulum fringilla pede sit amet augue. In turpis. Pellentesque posuere. Praesent turpis. Aenean posuere, tortor sed cursus feugiat, nunc augue blandit nunc, eu sollicitudin urna dolor sagittis lacus. Donec elit libero, sodales nec, volutpat a, suscipit non, turpis. Nullam sagittis.</p><p>Suspendisse pulvinar, augue ac venenatis condimentum, sem libero volutpat nibh, nec pellentesque velit pede quis nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Fusce id purus. Ut varius tincidunt libero. Phasellus dolor. Maecenas vestibulum mollis diam. Pellentesque ut neque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In dui magna, posuere eget, vestibulum et, tempor auctor, justo. In ac felis quis tortor malesuada pretium. Pellentesque auctor neque nec urna.</p><p>Proin sapien ipsum, porta a, auctor quis, euismod ut, mi. Aenean viverra rhoncus pede. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Ut non enim eleifend felis pretium feugiat. Vivamus quis mi. Phasellus a est. Phasellus magna. In hac habitasse platea dictumst. Curabitur at lacus ac velit ornare lobortis. Curabitur a felis in nunc fringilla tristique. Morbi mattis ullamcorper velit. Phasellus gravida semper nisi. Nullam vel sem. Pellentesque libero tortor, tincidunt et, tincidunt eget, semper nec, quam. Sed hendrerit. Morbi ac felis.</p><p>Nunc egestas, augue at pellentesque laoreet, felis eros vehicula leo, at malesuada velit leo quis pede. Donec interdum, metus et hendrerit aliquet, dolor diam sagittis ligula, eget egestas libero turpis vel mi. Nunc nulla. Fusce risus nisl, viverra et, tempor et, pretium in, sapien. Donec venenatis vulputate lorem. Morbi nec metus. Phasellus blandit leo ut odio. Maecenas ullamcorper, dui et placerat feugiat, eros pede varius nisi, condimentum viverra felis nunc et lorem. Sed magna purus, fermentum eu, tincidunt eu, varius ut, felis. In auctor lobortis lacus.</p><p>Quisque libero metus, condimentum nec, tempor a, commodo mollis, magna. Vestibulum ullamcorper mauris at ligula. Fusce fermentum. Nullam cursus lacinia erat. Praesent blandit laoreet nibh. Fusce convallis metus id felis luctus adipiscing. Pellentesque egestas, neque sit amet convallis pulvinar, justo nulla eleifend augue, ac auctor orci leo non est. Quisque id mi. Ut tincidunt tincidunt erat. Etiam feugiat lorem non metus. Vestibulum dapibus nunc ac augue. Curabitur vestibulum aliquam leo. Praesent egestas neque eu enim. In hac habitasse platea dictumst. Fusce a quam. Etiam ut purus mattis mauris sodales aliquam. Curabitur nisi. Quisque malesuada placerat nisl. Nam ipsum risus, rutrum vitae, vestibulum eu, molestie vel, lacus. Sed augue ipsum, egestas nec, vestibulum et, malesuada adipiscing, dui. Vestibulum facilisis, purus nec pulvinar iaculis, ligula mi congue nunc, vitae euismod ligula urna in dolor. Mauris sollicitudin fermentum libero. Praesent nonummy mi in odio. Nunc interdum lacus sit amet orci. Vestibulum rutrum, mi nec elementum vehicula, eros quam gravida nisl, id fringilla neque a</p></speak>',
     ];
 
-    ssmlSplit.configure({
+    const ssmlSplit = new SSMLSplit({
       softLimit: 2500,
       hardLimit: 5000,
       includeSSMLTagsInCounter: true,
-    });
+    })
 
     const result = ssmlSplit.split(ssml);
 
@@ -317,10 +317,10 @@ describe('AWS Polly limitations', () => {
       '<speak><p>Quisque libero metus, condimentum nec, tempor a, commodo mollis, magna. Vestibulum ullamcorper mauris at ligula. Fusce fermentum. Nullam cursus lacinia erat. Praesent blandit laoreet nibh. Fusce convallis metus id felis luctus adipiscing. Pellentesque egestas, neque sit amet convallis pulvinar, justo nulla eleifend augue, ac auctor orci leo non est. Quisque id mi. Ut tincidunt tincidunt erat. Etiam feugiat lorem non metus. Vestibulum dapibus nunc ac augue. Curabitur vestibulum aliquam leo. Praesent egestas neque eu enim. In hac habitasse platea dictumst. Fusce a quam. Etiam ut purus mattis mauris sodales aliquam. Curabitur nisi. Quisque malesuada placerat nisl. Nam ipsum risus, rutrum vitae, vestibulum eu, molestie vel, lacus. Sed augue ipsum, egestas nec, vestibulum et, malesuada adipiscing, dui. Vestibulum facilisis, purus nec pulvinar iaculis, ligula mi congue nunc, vitae euismod ligula urna in dolor. Mauris sollicitudin fermentum libero. Praesent nonummy mi in odio. Nunc interdum lacus sit amet orci. Vestibulum rutrum, mi nec elementum vehicula, eros quam gravida nisl, id fringilla neque a</p></speak>'
     ];
 
-    ssmlSplit.configure({
+    const ssmlSplit = new SSMLSplit({
       softLimit: 1500,
       hardLimit: 3000,
-    });
+    })
 
     const result = ssmlSplit.split(ssml);
 
