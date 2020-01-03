@@ -3,15 +3,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const defaults_1 = require("./defaults");
+const defaults_1 = __importDefault(require("./defaults"));
 const index_1 = __importDefault(require("./index"));
 describe('configure', () => {
     it('Should set default options when no options object is given', () => {
         const ssmlSplit = new index_1.default();
-        expect(ssmlSplit.options.extraSplitChars).toBe(defaults_1.EXTRA_SPLIT_CHARS);
-        expect(ssmlSplit.options.hardLimit).toBe(defaults_1.HARD_LIMIT);
-        expect(ssmlSplit.options.softLimit).toBe(defaults_1.SOFT_LIMIT);
-        expect(ssmlSplit.options.includeSSMLTagsInCounter).toBe(defaults_1.INCLUDE_SSML_TAGS_IN_COUNTER);
+        expect(ssmlSplit.options.extraSplitChars).toBe(defaults_1.default.EXTRA_SPLIT_CHARS);
+        expect(ssmlSplit.options.hardLimit).toBe(defaults_1.default.HARD_LIMIT);
+        expect(ssmlSplit.options.softLimit).toBe(defaults_1.default.SOFT_LIMIT);
+        expect(ssmlSplit.options.includeSSMLTagsInCounter).toBe(defaults_1.default.INCLUDE_SSML_TAGS_IN_COUNTER);
     });
     it('Should return an error when options is not an object', () => {
         try {

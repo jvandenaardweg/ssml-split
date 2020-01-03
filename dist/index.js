@@ -4,11 +4,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const polly_text_split_1 = __importDefault(require("polly-text-split"));
-const defaults_1 = require("./defaults");
+const defaults_1 = __importDefault(require("./defaults"));
 const errors_1 = require("./errors");
 class SSMLSplit {
     constructor(options) {
-        this.batches = [];
         if (options && typeof options !== "object") {
             throw new errors_1.ConfigurationValidationError("Parameter `options` must be an object.");
         }
@@ -18,11 +17,14 @@ class SSMLSplit {
             children: [],
         };
         this.batches = [];
+        this.accumulatedSSML = '';
+        this.textLength = 0;
+        this.characterCounter = 0;
         this.options = {
-            softLimit: options && options.softLimit || defaults_1.SOFT_LIMIT,
-            hardLimit: options && options.hardLimit || defaults_1.HARD_LIMIT,
-            includeSSMLTagsInCounter: options && options.includeSSMLTagsInCounter || defaults_1.INCLUDE_SSML_TAGS_IN_COUNTER,
-            extraSplitChars: options && options.extraSplitChars || defaults_1.EXTRA_SPLIT_CHARS
+            softLimit: options && options.softLimit || defaults_1.default.SOFT_LIMIT,
+            hardLimit: options && options.hardLimit || defaults_1.default.HARD_LIMIT,
+            includeSSMLTagsInCounter: options && options.includeSSMLTagsInCounter || defaults_1.default.INCLUDE_SSML_TAGS_IN_COUNTER,
+            extraSplitChars: options && options.extraSplitChars || defaults_1.default.EXTRA_SPLIT_CHARS
         };
     }
     split(ssml) {
