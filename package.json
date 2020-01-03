@@ -36,10 +36,13 @@
     "release": "release-it --no-npm.publish",
     "typescript:check": "tsc -p ./ --noEmit",
     "build": "tsc",
-    "dev": "tsc -p ./ --noEmit -w"
+    "dev": "tsc -p ./ --noEmit -w",
+    "lint": "tslint -c tslint.json 'src/**/*.ts'",
+    "lint:fix": "tslint -c tslint.json 'src/**/*.ts' --fix"
   },
   "release-it": {
     "hooks": {
+      "before:init": ["npm run lint", "npm run typescript:check", "npm run build", "npm test"],
       "after:bump": "npx auto-changelog -p"
     }
   },
