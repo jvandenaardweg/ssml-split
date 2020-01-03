@@ -57,7 +57,9 @@
       "tsx",
       "js"
     ],
-    "roots": ["<rootDir>/src"],
+    "roots": [
+      "<rootDir>/src"
+    ],
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     }
@@ -70,6 +72,7 @@
     "release-it": "^12.4.3",
     "ts-jest": "^24.2.0",
     "tslint": "^5.20.1",
+    "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.7.4",
     "typescript-tslint-plugin": "^0.5.5"
   },

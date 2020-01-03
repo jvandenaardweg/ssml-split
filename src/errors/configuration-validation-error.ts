@@ -1,8 +1,5 @@
 export class ConfigurationValidationError extends Error {
-  /**
-   * @param {string} message
-   */
-  constructor(message) {
+  constructor(message: string) {
     super(message);
     this.name = this.constructor.name;
   }
