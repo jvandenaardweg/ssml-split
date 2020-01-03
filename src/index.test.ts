@@ -1,14 +1,14 @@
-import { EXTRA_SPLIT_CHARS, HARD_LIMIT, INCLUDE_SSML_TAGS_IN_COUNTER, SOFT_LIMIT } from "./defaults";
+import defaults from "./defaults";
 import SSMLSplit from "./index";
 
 describe('configure', () => {
 
   it('Should set default options when no options object is given', () => {
     const ssmlSplit = new SSMLSplit()
-    expect(ssmlSplit.options.extraSplitChars).toBe(EXTRA_SPLIT_CHARS);
-    expect(ssmlSplit.options.hardLimit).toBe(HARD_LIMIT);
-    expect(ssmlSplit.options.softLimit).toBe(SOFT_LIMIT);
-    expect(ssmlSplit.options.includeSSMLTagsInCounter).toBe(INCLUDE_SSML_TAGS_IN_COUNTER);
+    expect(ssmlSplit.options.extraSplitChars).toBe(defaults.EXTRA_SPLIT_CHARS);
+    expect(ssmlSplit.options.hardLimit).toBe(defaults.HARD_LIMIT);
+    expect(ssmlSplit.options.softLimit).toBe(defaults.SOFT_LIMIT);
+    expect(ssmlSplit.options.includeSSMLTagsInCounter).toBe(defaults.INCLUDE_SSML_TAGS_IN_COUNTER);
   });
 
   it('Should return an error when options is not an object', () => {

@@ -1,5 +1,5 @@
 import pollyTextSplit from "polly-text-split";
-import { EXTRA_SPLIT_CHARS, HARD_LIMIT, INCLUDE_SSML_TAGS_IN_COUNTER, SOFT_LIMIT } from "./defaults";
+import defaults from "./defaults";
 import { ConfigurationValidationError, NotPossibleSplitError, SSMLParseError } from "./errors";
 
 interface OptionsInput {
@@ -57,10 +57,10 @@ export class SSMLSplit {
     this.characterCounter = 0;
 
     this.options = {
-      softLimit: options && options.softLimit || SOFT_LIMIT,
-      hardLimit: options && options.hardLimit || HARD_LIMIT,
-      includeSSMLTagsInCounter: options && options.includeSSMLTagsInCounter ||  INCLUDE_SSML_TAGS_IN_COUNTER,
-      extraSplitChars: options && options.extraSplitChars || EXTRA_SPLIT_CHARS
+      softLimit: options && options.softLimit || defaults.SOFT_LIMIT,
+      hardLimit: options && options.hardLimit || defaults.HARD_LIMIT,
+      includeSSMLTagsInCounter: options && options.includeSSMLTagsInCounter ||  defaults.INCLUDE_SSML_TAGS_IN_COUNTER,
+      extraSplitChars: options && options.extraSplitChars || defaults.EXTRA_SPLIT_CHARS
     };
   }
 
