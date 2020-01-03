@@ -16,14 +16,15 @@ interface Options {
   extraSplitChars: string;
 }
 
-interface RootNode {
-  parentNode: RootNode | null;
+interface Node  {
+  parentNode: Node | null;
   type: string;
-  children: ChildNode[];
+  value: string;
+  children?: Node[];
 }
 
-interface ChildNode extends RootNode {
-  value: string;
+interface RootNode extends Node {
+  children: Node[];
 }
 
 /**
@@ -49,6 +50,7 @@ export class SSMLSplit {
       parentNode: null,
       type: "root",
       children: [],
+      value: ''
     };
 
     this.batches = [];
@@ -83,7 +85,7 @@ export class SSMLSplit {
     if (this.root.children.length === 1 && this.root.children[0].type === "speak") {
       // remove global <speak> tag node
       // since the text will be split, new <speak> tags will wrap batches
-      this.root.children = this.root.children[0].children;
+      this.root.children = this.root.children[0].children!;
     }
 
     this.accumulatedSSML = "";
@@ -143,7 +145,7 @@ export class SSMLSplit {
     return ssml.split("\n").join(" ");
   }
 
-  private traverseNode(currentNode: any) {
+  private traverseNode(currentNode: Node) {
     // check if node has children to check out too
     if (currentNode.children) {
       if (currentNode.type !== "root") {
@@ -162,7 +164,7 @@ export class SSMLSplit {
     }
   }
 
-  private splitTextNode(node: any): void {
+  private splitTextNode(node: Node): void {
     // Overflows => Text node needs to be checked for possible split location
     const localSoftLimit =
       this.textLength === 0 ? this.options.softLimit : this.options.softLimit - this.textLength;
@@ -199,7 +201,7 @@ export class SSMLSplit {
     }
   }
 
-  private noChildrenNodeToText(node: any): string {
+  private noChildrenNodeToText(node: Node): string {
     if (node.type === "TEXT") {
       this.textLength += node.value.length;
       return node.value;
@@ -219,7 +221,7 @@ export class SSMLSplit {
   /**
    * Adds a new tree node as a parentNode child.
    */
-  private addNode(parentNode: RootNode, newNode: any): void {
+  private addNode(parentNode: Node, newNode: Node): void {
     if (parentNode.children) {
       parentNode.children.push(newNode);
     } else {
@@ -249,7 +251,7 @@ export class SSMLSplit {
         if (textHasStarted) {
           textHasStarted = false;
 
-          const newNode = {
+          const newNode: Node = {
             parentNode: currentNode,
             type: "TEXT",
             value: text,
@@ -317,7 +319,7 @@ export class SSMLSplit {
          */
 
         if (!isEndTag) {
-          const newNode = {
+          const newNode: Node = {
             parentNode: currentNode,
             type,
             value
@@ -326,14 +328,14 @@ export class SSMLSplit {
 
           if (!isEmptyTag) {
             // Not an empty tag => can have other children, then keep it active
-            currentNode = newNode as any;
+            currentNode = newNode as RootNode;
           }
         } else if (isEmptyTag) {
           // TODO: this else if might not be needed, might be removed
           // an empty tag (<break />) cannot be an end tag (</break />), doesnt make sense
 
           // is an end tag + empty end tag
-          const newNode = {
+          const newNode: Node = {
             parentNode: currentNode,
             type,
             value,
@@ -367,7 +369,7 @@ export class SSMLSplit {
 
         if (i === len - 1 && textHasStarted) {
           // ssml ends with plain text => create node
-          const newNode = {
+          const newNode: Node = {
             parentNode: currentNode,
             type: "TEXT",
             value: text,
