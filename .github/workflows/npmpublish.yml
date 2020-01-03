@@ -15,6 +15,7 @@ jobs:
         with:
           node-version: 12
       - run: npm ci
+      - run: npm run typescript:check
       - run: npm test
 
   publish-npm:
