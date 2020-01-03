@@ -13,6 +13,7 @@ describe('configure', () => {
 
   it('Should return an error when options is not an object', () => {
     try {
+      // @ts-ignore
       ssmlSplit.configure(1);
     } catch (err) {
       expect(err.message).toBe('Parameter `options` must be an object.');
@@ -24,7 +25,7 @@ describe('configure', () => {
       softLimit: 5
     });
 
-    expect(ssmlSplit[Object.getOwnPropertySymbols(ssmlSplit)[2]]).toBe(5);
+    expect(ssmlSplit.softLimit).toBe(5);
   });
 
   it('Should return 10 when "hardLimit: 10" is given as an option', () => {
@@ -32,7 +33,7 @@ describe('configure', () => {
       hardLimit: 10
     });
 
-    expect(ssmlSplit[Object.getOwnPropertySymbols(ssmlSplit)[3]]).toBe(10);
+    expect(ssmlSplit.hardLimit).toBe(10);
   });
 
   it('Should return true when "includeSSMLTagsInCounter: false" is given as an option', () => {
@@ -40,7 +41,7 @@ describe('configure', () => {
       includeSSMLTagsInCounter: false
     });
 
-    expect(ssmlSplit[Object.getOwnPropertySymbols(ssmlSplit)[4]]).toBe(false);
+    expect(ssmlSplit.includeSSMLTagsInCounter).toBe(false);
   });
 
   it('Should return true when "includeSSMLTagsInCounter: true" is given as an option', () => {
@@ -48,7 +49,7 @@ describe('configure', () => {
       includeSSMLTagsInCounter: true
     });
 
-    expect(ssmlSplit[Object.getOwnPropertySymbols(ssmlSplit)[4]]).toBe(true);
+    expect(ssmlSplit.includeSSMLTagsInCounter).toBe(true);
   });
 
   it('Should return "/" when "extraSplitChars: \'/\'" is given as an option', () => {
@@ -56,7 +57,7 @@ describe('configure', () => {
       extraSplitChars: '/'
     });
 
-    expect(ssmlSplit[Object.getOwnPropertySymbols(ssmlSplit)[5]]).toBe('/');
+    expect(ssmlSplit.extraSplitChars).toBe('/');
   });
 });
 
