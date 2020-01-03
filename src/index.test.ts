@@ -1,5 +1,5 @@
+import { EXTRA_SPLIT_CHARS, HARD_LIMIT, INCLUDE_SSML_TAGS_IN_COUNTER, SOFT_LIMIT } from "./defaults";
 import SSMLSplit from "./index";
-import { EXTRA_SPLIT_CHARS, HARD_LIMIT, SOFT_LIMIT, INCLUDE_SSML_TAGS_IN_COUNTER } from "./defaults";
 
 describe('configure', () => {
 
