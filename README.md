@@ -11,7 +11,7 @@ Based on [polly-ssml-split](https://github.com/oleglegun/polly-ssml-split) by [@
 The [polly-ssml-split](https://github.com/oleglegun/polly-ssml-split) by [@oleglegun](https://github.com/oleglegun) library already handles splitting of SSML correctly for AWS Polly, but wasn't working properly for Google's Text to Speech. So I just modified the package to fit my needs.
 
 ### Changes compared to `polly-ssml-split`:
-- Added `includeSSMLTagsInCounter` option to count characters based on the complete SSML tag and not just the included text characters.
+- Added `includeSSMLTagsInCounter` option to count characters based on the complete SSML tag and not just the included text characters. Which is required if you work with Google's Text to Speech API.
 - Rewrote the library to use Typescript, so you get correct type checking in your Typescript project.
 - Removed the `.configure` method and use the class constructor method for it instead.
 - Added `breakParagraphsAboveHardLimit` options to break up large paragraphs by removing the `<p>` and replacing the `</p>` with a `<break strength="x-strong" />`, which results in the same pause ([source](https://docs.aws.amazon.com/polly/latest/dg/supportedtags.html#p-tag)). This allows the script to properly split the paragraph and to send less batches to the text to speech API's.
