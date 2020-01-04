@@ -29,7 +29,7 @@ INVALID_ARGUMENT: 5000 characters limit exceeded.
 - Added `includeSSMLTagsInCounter` option to count characters based on the complete SSML tag and not just the included text characters.
 - Rewrote the library to use Typescript, so you get correct type checking in your Typescript project.
 - Removed the `.configure` method and use the class constructor method for it instead.
-- Breaking up large paragraphs `<p></p>` by removing the `<p>` and replacing the `</p>` with a `<break strength="x-string" />, which results in the same pause.
+- Added `breakParagraphsAboveHardLimit` options to break up large paragraphs by removing the `<p>` and replacing the `</p>` with a `<break strength="x-strong" />`, which results in the same pause ([source](https://docs.aws.amazon.com/polly/latest/dg/supportedtags.html#p-tag)). This allows the script to properly split the paragraph and to send less batches to the text to speech API's.
 - Added more tests using Jest.
 
 ## Usage:
@@ -41,9 +41,10 @@ npm install ssml-split --save
 import SSMLSplit from 'ssml-split';
 
 const ssmlSplit = new SSMLSplit({
-  softLimit: 2500, // Finds a possible split moment starting from 2500 characters
+  softLimit: 4000, // Finds a possible split moment starting from 4000 characters
   hardLimit: 5000, // Google Text to Speech limitation
-  includeSSMLTagsInCounter: true // Set true when using Google Text to Speech API, set to false with AWS Polly
+  includeSSMLTagsInCounter: true, // Set true when using Google Text to Speech API, set to false with AWS Polly
+  breakParagraphsAboveHardLimit: true // Allow to split large paragraphs, set to false to keep your <p></p> intact
 });
 
 const batches = ssmlSplit.split('<speak>your long text here</speak>');
@@ -55,18 +56,20 @@ const batches = ssmlSplit.split('<speak>your long text here</speak>');
 #### AWS
 ```javascript
 new SSMLSplit({
-  softLimit: 1500,
+  softLimit: 2000,
   hardLimit: 3000, // AWS Polly limitation
-  includeSSMLTagsInCounter: false
+  includeSSMLTagsInCounter: false, // Do not count SSML tags as characters
+  breakParagraphsAboveHardLimit: true, // optional, but recommended when you have large <p>'s
 })
 ```
 
 #### Google
 ```javascript
 new SSMLSplit({
-  softLimit: 2500,
+  softLimit: 4000,
   hardLimit: 5000, // Google Text to Speech API limitation
-  includeSSMLTagsInCounter: true
+  includeSSMLTagsInCounter: true, // Count SSML tags as characters
+  breakParagraphsAboveHardLimit: true, // optional, but recommended when you have large <p>'s
 })
 ```
 

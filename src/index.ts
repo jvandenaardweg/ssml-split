@@ -7,6 +7,7 @@ interface OptionsInput {
   softLimit?: number;
   includeSSMLTagsInCounter?: boolean;
   extraSplitChars?: string;
+  breakParagraphsAboveHardLimit?: boolean;
 }
 
 interface Options {
@@ -14,6 +15,7 @@ interface Options {
   softLimit: number;
   includeSSMLTagsInCounter: boolean;
   extraSplitChars: string;
+  breakParagraphsAboveHardLimit: boolean;
 }
 
 interface Node  {
@@ -53,6 +55,7 @@ export class SSMLSplit {
       hardLimit: options && options.hardLimit || defaults.HARD_LIMIT,
       includeSSMLTagsInCounter: options && options.includeSSMLTagsInCounter ||  defaults.INCLUDE_SSML_TAGS_IN_COUNTER,
       extraSplitChars: options && options.extraSplitChars || defaults.EXTRA_SPLIT_CHARS,
+      breakParagraphsAboveHardLimit: options && options.breakParagraphsAboveHardLimit || defaults.BREAK_PARAGRAPHS_ABOVE_HARD_LIMIT
     };
   }
 
@@ -68,7 +71,7 @@ export class SSMLSplit {
     // Create a copy so ssmlInput stays intact when we replace paragraphs with breaks
     let ssmlToWorkWith = `${ssmlInput}`;
 
-    if (ssmlToWorkWith.length > this.options.hardLimit) {
+    if (this.options.breakParagraphsAboveHardLimit && ssmlToWorkWith.length > this.options.hardLimit) {
       // Remove paragraphs and replace it with a break.
       // This allows easier break up of long paragraphs, while maintaining the proper pause at the end.
       // Adding <break strength="x-strong" /> at the end of a paragraph is the same as wrapping your text inside a <p></p>
