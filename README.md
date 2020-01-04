@@ -29,6 +29,7 @@ INVALID_ARGUMENT: 5000 characters limit exceeded.
 - Added `includeSSMLTagsInCounter` option to count characters based on the complete SSML tag and not just the included text characters.
 - Rewrote the library to use Typescript, so you get correct type checking in your Typescript project.
 - Removed the `.configure` method and use the class constructor method for it instead.
+- Breaking up large paragraphs `<p></p>` by removing the `<p>` and replacing the `</p>` with a `<break strength="x-string" />, which results in the same pause.
 - Added more tests using Jest.
 
 ## Usage:
