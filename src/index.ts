@@ -3,10 +3,50 @@ import defaults from './defaults';
 import { ConfigurationValidationError, NotPossibleSplitError, SSMLParseError } from './errors';
 
 interface OptionsInput {
-  hardLimit?: number;
+  /**
+   * Default: `2000`
+   *
+   * The amount of characters the script will start trying to break-up your SSML in multiple parts.
+   * You can tweak this number to see what works for you.
+   */
   softLimit?: number;
+  /**
+   * Default: `3000`
+   *
+   * The amount of characters the script should stay below for maximum size per SSML part. If any batch size goes above this, the script will error.
+   */
+  hardLimit?: number;
+  /**
+   * Default: `false`
+   *
+   * Set to `true` to include the SSML tag characters in the calculation on when to split the SSML,
+   * this is recommended when you work with Google's Text to Speech API.
+   *
+   * For example: `<speak><p>some text</p></speak>`. The default behaviour would count that as 9 characters,
+   * which is fine for AWS Polly, but not for Google's Text to Speech API.
+   * By setting this to `true` it will be count as 31 characters, just like Google's Text to Speech API counts it.
+   *
+   * This should prevent you from seeing this error when using Google's Text to Speech API: "INVALID_ARGUMENT: 5000 characters limit exceeded."
+   */
   includeSSMLTagsInCounter?: boolean;
+  /**
+   * Default: `,;.`
+   *
+   * Text can be split at these given characters.
+   */
   extraSplitChars?: string;
+  /**
+   * Default: `false`
+   *
+   * Set to `true` to allow the script to break up large paragraphs
+   * by removing the `<p>` and replacing the `</p>` with a `<break strength="x-strong" />`,
+   * which results in the same pause. Source: https://docs.aws.amazon.com/polly/latest/dg/supportedtags.html#p-tag
+   *
+   * This allows the script to properly split large paragraph's and to send less batches to the text to speech API's.
+   *
+   * It is also recommended to set this to `true` when you work with large paragraphs and experiencing errors
+   * like "SSML tag appeared to be too long".
+   */
   breakParagraphsAboveHardLimit?: boolean;
 }
 
