@@ -46,17 +46,7 @@ export class SSMLSplit {
       throw new ConfigurationValidationError('Parameter `options` must be an object.');
     }
 
-    this.root = {
-      parentNode: null,
-      type: 'root',
-      children: [],
-      value: ''
-    };
-
-    this.batches = [];
-    this.accumulatedSSML = '';
-    this.textLength = 0;
-    this.characterCounter = 0;
+    this.setDefaults();
 
     this.options = {
       softLimit: options && options.softLimit || defaults.SOFT_LIMIT,
@@ -73,10 +63,7 @@ export class SSMLSplit {
    * @throws {SSMLParseError} Argument `ssml` is not a valid SSML string.
    */
   public split(ssml: string): string[] {
-    // Reset tree
-    if (this.root.children.length !== 0) {
-      this.root.children = [];
-    }
+    this.setDefaults();
 
     // Sanitize and create tree
     this.buildTree(this.sanitize(ssml));
@@ -87,9 +74,6 @@ export class SSMLSplit {
       // since the text will be split, new <speak> tags will wrap batches
       this.root.children = this.root.children[0].children!;
     }
-
-    this.accumulatedSSML = '';
-    this.textLength = 0;
 
     if (this.root.children.length === 0) {
       return this.batches;
@@ -141,6 +125,20 @@ export class SSMLSplit {
     }
 
     return this.batches.splice(0);
+  }
+
+  private setDefaults() {
+    this.root = {
+      parentNode: null,
+      type: 'root',
+      children: [],
+      value: ''
+    };
+
+    this.batches = [];
+    this.accumulatedSSML = '';
+    this.textLength = 0;
+    this.characterCounter = 0;
   }
 
   private sanitize(ssml: string): string {
