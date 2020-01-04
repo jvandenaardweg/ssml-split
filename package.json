@@ -56,9 +56,6 @@
     "testPathIgnorePatterns": [
       "coverage"
     ],
-    "collectCoverageFrom": [
-      "./src/**"
-    ],
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
     "moduleFileExtensions": [
       "ts",
@@ -70,7 +67,11 @@
     ],
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
-    }
+    },
+    "collectCoverageFrom": [
+      "src/**",
+      "!**/@types/**"
+    ]
   },
   "devDependencies": {
     "@types/jest": "^24.0.25",

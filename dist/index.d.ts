@@ -18,7 +18,8 @@ export declare class SSMLSplit {
     private textLength;
     private characterCounter;
     constructor(options?: OptionsInput);
-    split(ssml: string): string[];
+    split(ssmlInput: string): string[];
+    private setDefaults;
     private sanitize;
     private traverseNode;
     private splitTextNode;

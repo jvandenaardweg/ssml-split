@@ -8,42 +8,35 @@ const defaults_1 = __importDefault(require("./defaults"));
 const errors_1 = require("./errors");
 class SSMLSplit {
     constructor(options) {
-        if (options && typeof options !== "object") {
-            throw new errors_1.ConfigurationValidationError("Parameter `options` must be an object.");
+        if (options && typeof options !== 'object') {
+            throw new errors_1.ConfigurationValidationError('Parameter `options` must be an object.');
         }
-        this.root = {
-            parentNode: null,
-            type: "root",
-            children: [],
-        };
-        this.batches = [];
-        this.accumulatedSSML = '';
-        this.textLength = 0;
-        this.characterCounter = 0;
+        this.setDefaults();
         this.options = {
             softLimit: options && options.softLimit || defaults_1.default.SOFT_LIMIT,
             hardLimit: options && options.hardLimit || defaults_1.default.HARD_LIMIT,
             includeSSMLTagsInCounter: options && options.includeSSMLTagsInCounter || defaults_1.default.INCLUDE_SSML_TAGS_IN_COUNTER,
-            extraSplitChars: options && options.extraSplitChars || defaults_1.default.EXTRA_SPLIT_CHARS
+            extraSplitChars: options && options.extraSplitChars || defaults_1.default.EXTRA_SPLIT_CHARS,
         };
     }
-    split(ssml) {
-        if (this.root.children.length !== 0) {
-            this.root.children = [];
+    split(ssmlInput) {
+        this.setDefaults();
+        let ssmlToWorkWith = `${ssmlInput}`;
+        if (ssmlToWorkWith.length > this.options.hardLimit) {
+            ssmlToWorkWith = ssmlToWorkWith.replace(/<p>/g, '');
+            ssmlToWorkWith = ssmlToWorkWith.replace(/<\/p>/g, '<break strength="x-strong" />');
         }
-        this.buildTree(this.sanitize(ssml));
-        if (this.root.children.length === 1 && this.root.children[0].type === "speak") {
+        this.buildTree(this.sanitize(ssmlToWorkWith));
+        if (this.root.children.length === 1 && this.root.children[0].type === 'speak') {
             this.root.children = this.root.children[0].children;
         }
-        this.accumulatedSSML = "";
-        this.textLength = 0;
         if (this.root.children.length === 0) {
             return this.batches;
         }
         this.root.children.forEach((node) => {
             this.characterCounter = this.options.includeSSMLTagsInCounter ? this.accumulatedSSML.length : this.textLength;
             if (this.characterCounter < this.options.softLimit) {
-                if (node.type === "TEXT" &&
+                if (node.type === 'TEXT' &&
                     this.textLength + node.value.length > this.options.softLimit) {
                     this.splitTextNode(node);
                 }
@@ -53,9 +46,9 @@ class SSMLSplit {
             }
             else if (this.characterCounter < this.options.hardLimit) {
                 this.makeSpeakBatch(this.accumulatedSSML);
-                this.accumulatedSSML = "";
+                this.accumulatedSSML = '';
                 this.textLength = 0;
-                if (node.type === "TEXT" && node.value.length > this.options.softLimit) {
+                if (node.type === 'TEXT' && node.value.length > this.options.softLimit) {
                     this.splitTextNode(node);
                 }
                 else {
@@ -63,7 +56,7 @@ class SSMLSplit {
                 }
             }
             else {
-                throw new errors_1.NotPossibleSplitError("SSML tag appeared to be too long.");
+                throw new errors_1.NotPossibleSplitError('SSML tag appeared to be too long.');
             }
         });
         this.characterCounter = this.options.includeSSMLTagsInCounter ? this.accumulatedSSML.length : this.textLength;
@@ -72,17 +65,29 @@ class SSMLSplit {
                 this.makeSpeakBatch(this.accumulatedSSML);
             }
             else {
-                throw new errors_1.NotPossibleSplitError("Last SSML tag appeared to be too long.");
+                throw new errors_1.NotPossibleSplitError('Last SSML tag appeared to be too long.');
             }
         }
         return this.batches.splice(0);
     }
+    setDefaults() {
+        this.root = {
+            parentNode: null,
+            type: 'root',
+            children: [],
+            value: ''
+        };
+        this.batches = [];
+        this.accumulatedSSML = '';
+        this.textLength = 0;
+        this.characterCounter = 0;
+    }
     sanitize(ssml) {
-        return ssml.split("\n").join(" ");
+        return ssml.split('\n').join(' ');
     }
     traverseNode(currentNode) {
         if (currentNode.children) {
-            if (currentNode.type !== "root") {
+            if (currentNode.type !== 'root') {
                 this.accumulatedSSML += `<${currentNode.type}${currentNode.value}>`;
             }
             currentNode.children.forEach((node) => {
@@ -115,12 +120,12 @@ class SSMLSplit {
             polly_text_split_1.default.split(this.accumulatedSSML).forEach((text) => {
                 this.makeSpeakBatch(text);
             });
-            this.accumulatedSSML = "";
+            this.accumulatedSSML = '';
             this.textLength = 0;
         }
     }
     noChildrenNodeToText(node) {
-        if (node.type === "TEXT") {
+        if (node.type === 'TEXT') {
             this.textLength += node.value.length;
             return node.value;
         }
@@ -141,43 +146,43 @@ class SSMLSplit {
     }
     buildTree(ssml) {
         ssml = ssml.trim();
-        let text = "";
+        let text = '';
         let textHasStarted = false;
         let currentNode = this.root;
         for (let i = 0, len = ssml.length; i < len; i++) {
-            if (ssml[i] === "<") {
+            if (ssml[i] === '<') {
                 if (textHasStarted) {
                     textHasStarted = false;
                     const newNode = {
                         parentNode: currentNode,
-                        type: "TEXT",
+                        type: 'TEXT',
                         value: text,
                     };
                     this.addNode(currentNode, newNode);
                 }
-                let type = "";
-                let value = "";
+                let type = '';
+                let value = '';
                 let isEndTag = false;
                 let isEmptyTag = false;
                 let j = i + 1;
-                if (ssml[j] === "/") {
+                if (ssml[j] === '/') {
                     isEndTag = true;
                     j++;
-                    while (ssml[j] !== ">") {
+                    while (ssml[j] !== '>') {
                         type += ssml[j];
                         j++;
                     }
                 }
                 else {
-                    while (ssml[j] !== " " && ssml[j] !== ">" && ssml[j] !== "/") {
+                    while (ssml[j] !== ' ' && ssml[j] !== '>' && ssml[j] !== '/') {
                         type += ssml[j];
                         j++;
                     }
                     while (true) {
-                        if (ssml[j] !== ">") {
+                        if (ssml[j] !== '>') {
                             value += ssml[j];
                         }
-                        else if (ssml[j - 1] === "/") {
+                        else if (ssml[j - 1] === '/') {
                             isEmptyTag = true;
                             if (value.length !== 0) {
                                 value = value.slice(0, value.length - 1);
@@ -221,13 +226,13 @@ class SSMLSplit {
             else {
                 if (!textHasStarted) {
                     textHasStarted = true;
-                    text = "";
+                    text = '';
                 }
                 text += ssml[i];
                 if (i === len - 1 && textHasStarted) {
                     const newNode = {
                         parentNode: currentNode,
-                        type: "TEXT",
+                        type: 'TEXT',
                         value: text,
                     };
                     this.addNode(currentNode, newNode);
