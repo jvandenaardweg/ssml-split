@@ -4,7 +4,7 @@ import { ConfigurationValidationError, NotPossibleSplitError, SSMLParseError } f
 
 interface OptionsInput {
   /**
-   * Default: `2000`
+   * Default: `1500`
    *
    * The amount of characters the script will start trying to break-up your SSML in multiple parts.
    * You can tweak this number to see what works for you.
