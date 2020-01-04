@@ -1,7 +1,7 @@
 import defaults from '../defaults';
 import SSMLSplit from '../index';
 
-import { ssmlExampleLargeMultipleParagraphs, ssmlExampleLargeMultipleParagraphsWithSentences, ssmlExampleLargeSingleParagraph, ssmlExampleLargeArticle } from './ssml-examples';
+import { ssmlExampleLargeArticle, ssmlExampleLargeMultipleParagraphs, ssmlExampleLargeMultipleParagraphsWithSentences, ssmlExampleLargeSingleParagraph } from './ssml-examples';
 
 const GOOGLE_SOFT_LIMIT = 4000;
 const GOOGLE_HARD_LIMIT = 5000;
