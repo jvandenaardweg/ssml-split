@@ -20,7 +20,7 @@
     "outDir": "dist",
     "target": "es6",
     "module": "commonjs",
-    "removeComments": true,
+    "removeComments": false, // Keep documentation
     "incremental": true,
     "skipLibCheck": true,
     "sourceMap": false,
