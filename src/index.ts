@@ -52,7 +52,7 @@ export class SSMLSplit {
       softLimit: options && options.softLimit || defaults.SOFT_LIMIT,
       hardLimit: options && options.hardLimit || defaults.HARD_LIMIT,
       includeSSMLTagsInCounter: options && options.includeSSMLTagsInCounter ||  defaults.INCLUDE_SSML_TAGS_IN_COUNTER,
-      extraSplitChars: options && options.extraSplitChars || defaults.EXTRA_SPLIT_CHARS
+      extraSplitChars: options && options.extraSplitChars || defaults.EXTRA_SPLIT_CHARS,
     };
   }
 
@@ -62,11 +62,23 @@ export class SSMLSplit {
    * @throws {NotPossibleSplitError} Text cannot be split, increase `hardLimit`.
    * @throws {SSMLParseError} Argument `ssml` is not a valid SSML string.
    */
-  public split(ssml: string): string[] {
+  public split(ssmlInput: string): string[] {
     this.setDefaults();
 
+    // Create a copy so ssmlInput stays intact when we replace paragraphs with breaks
+    let ssmlToWorkWith = `${ssmlInput}`;
+
+    if (ssmlToWorkWith.length > this.options.hardLimit) {
+      // Remove paragraphs and replace it with a break.
+      // This allows easier break up of long paragraphs, while maintaining the proper pause at the end.
+      // Adding <break strength="x-strong" /> at the end of a paragraph is the same as wrapping your text inside a <p></p>
+      // https://docs.aws.amazon.com/polly/latest/dg/supportedtags.html#p-tag
+      ssmlToWorkWith = ssmlToWorkWith.replace(/<p>/g, '');
+      ssmlToWorkWith = ssmlToWorkWith.replace(/<\/p>/g, '<break strength="x-strong" />');
+    }
+
     // Sanitize and create tree
-    this.buildTree(this.sanitize(ssml));
+    this.buildTree(this.sanitize(ssmlToWorkWith));
 
     // check if SSML is wrapped with <speak> tag
     if (this.root.children.length === 1 && this.root.children[0].type === 'speak') {
