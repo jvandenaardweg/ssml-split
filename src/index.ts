@@ -2,7 +2,7 @@ import pollyTextSplit from 'polly-text-split';
 import defaults from './defaults';
 import { ConfigurationValidationError, NotPossibleSplitError, SSMLParseError } from './errors';
 
-interface OptionsInput {
+export interface OptionsInput {
   /**
    * Default: `1500`
    *
@@ -50,7 +50,7 @@ interface OptionsInput {
   breakParagraphsAboveHardLimit?: boolean;
 }
 
-interface Options {
+export interface Options {
   hardLimit: number;
   softLimit: number;
   includeSSMLTagsInCounter: boolean;
