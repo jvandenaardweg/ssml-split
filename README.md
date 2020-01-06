@@ -51,13 +51,13 @@ const batches = ssmlSplit.split('<speak>your long ssml here</speak>');
 ```
 
 
-| Option              | Default                       | Description                                                                           |
-| ------------------- | ----------------------------- | ------------------------------------------------------------------------------------- |
-| `softLimit`                     | `1500`  | The amount of characters the script will start trying to break-up your SSML in multiple parts. You can tweak this number to see what works for you. |
-| `hardLimit`                     | `3000`  | The amount of characters the script should stay below for maximum size per SSML part. If any batch size goes above this, the script will error. |
-| `includeSSMLTagsInCounter`      | `false` | Set to `true` to include the SSML tag characters in the calculation on when to split the SSML. This is recommended when you work with Google's Text to Speech API. Set to `false` to only include text characters in the calculation, which is recommended for AWS Polly. |
-| `breakParagraphsAboveHardLimit` | `false` | Set to `true` to allow the script to break up large paragraphs by removing the `<p>` and replacing the `</p>` with a `<break strength="x-strong" />`, [which results in the same pause](https://docs.aws.amazon.com/polly/latest/dg/supportedtags.html#p-tag). |
-| `extraSplitChars`               | `,;.` | Characters that can be used as split markers for plain text.
+| Option              | Type | Default                       | Description                                                                           |
+| ------------------- | ---- | ------------------------- | ------------------------------------------------------------------------------------- |
+| `softLimit`                     | `number` | `1500`  | The amount of characters the script will start trying to break-up your SSML in multiple parts. You can tweak this number to see what works for you. |
+| `hardLimit`                     | `number` | `3000`  | The amount of characters the script should stay below for maximum size per SSML part. If any batch size goes above this, the script will error. |
+| `includeSSMLTagsInCounter`      | `boolean` | `false` | Set to `true` to include the SSML tag characters in the calculation on when to split the SSML. This is recommended when you work with Google's Text to Speech API. Set to `false` to only include text characters in the calculation, which is recommended for AWS Polly. |
+| `breakParagraphsAboveHardLimit` | `boolean` | `false` | Set to `true` to allow the script to break up large paragraphs by removing the `<p>` and replacing the `</p>` with a `<break strength="x-strong" />`, [which results in the same pause](https://docs.aws.amazon.com/polly/latest/dg/supportedtags.html#p-tag). |
+| `extraSplitChars`               | `string` | `,;.` | Characters that can be used as split markers for plain text.
 
 ### About: includeSSMLTagsInCounter
 By adding the option `includeSSMLTagsInCounter: true` to include the SSML tag characters in the calculation on when to split the SSML, makes the library also work with Google's Text to Speech API.
