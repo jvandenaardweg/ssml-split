@@ -101,7 +101,6 @@ new SSMLSplit({
   breakParagraphsAboveHardLimit: true, // optional, but recommended when you have large <p>'s
 })
 ```
-[API Documentation](https://github.com/jvandenaardweg/ssml-split/blob/master/API.md)
 
 ## About
 The [polly-ssml-split](https://github.com/oleglegun/polly-ssml-split) by [@oleglegun](https://github.com/oleglegun) library already handles splitting of SSML correctly for AWS Polly, but wasn't working properly for Google's Text to Speech. So I just modified the package to fit my needs.
