@@ -9,6 +9,14 @@ const GOOGLE_HARD_LIMIT = 5000;
 const AWS_SOFT_LIMIT = 2000;
 const AWS_HARD_LIMIT = 3000;
 
+/**
+ * Remove SSML tags from the SSML string, so we can count like AWS counts.
+ * To verify if the output SSML stays below AWS' hard limit.
+ */
+function removeSSMLTags (ssml: string): string {
+  return ssml.replace(/(<([^>]+)>)/ig, '').trim();
+}
+
 describe('constructor', () => {
 
   it('Should set default options when no options object is given', () => {
@@ -440,8 +448,7 @@ describe('AWS Polly limitations', () => {
     expect(result).toStrictEqual(expected);
 
     result.forEach(item => {
-      // Remove the SSML tags, that's how AWS counts
-      const characterCountHowAWSCountsIt = item.replace('<speak><p>', '').replace('</p></speak>', '').trim().length;
+      const characterCountHowAWSCountsIt = removeSSMLTags(item).length;
       expect(characterCountHowAWSCountsIt).toBeLessThanOrEqual(AWS_HARD_LIMIT)
     })
   });
@@ -466,8 +473,7 @@ describe('AWS Polly limitations', () => {
     expect(result).toStrictEqual(expected);
 
     result.forEach(item => {
-      // Remove the SSML tags, that's how AWS counts
-      const characterCountHowAWSCountsIt = item.replace('<speak><p>', '').replace('</p></speak>', '').trim().length;
+      const characterCountHowAWSCountsIt = removeSSMLTags(item).length;
       expect(characterCountHowAWSCountsIt).toBeLessThanOrEqual(AWS_HARD_LIMIT)
     })
   });
@@ -519,8 +525,7 @@ describe('AWS Polly limitations', () => {
     expect(result).toStrictEqual(expected);
 
     result.forEach(item => {
-      // Remove the SSML tags, that's how AWS counts
-      const characterCountHowAWSCountsIt = item.replace('<speak><p>', '').replace('</p></speak>', '').trim().length;
+      const characterCountHowAWSCountsIt = removeSSMLTags(item).length;
       expect(characterCountHowAWSCountsIt).toBeLessThanOrEqual(AWS_HARD_LIMIT)
     })
   });
