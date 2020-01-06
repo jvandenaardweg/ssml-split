@@ -31,6 +31,8 @@ class SSMLSplit {
      * @throws {SSMLParseError} Argument `ssml` is not a valid SSML string.
      */
     split(ssmlInput) {
+        // Set the defaults everytime we invoke split
+        // So you can use the split method multiple times using the same class instance
         this.setDefaults();
         // Create a copy so ssmlInput stays intact when we replace paragraphs with breaks
         let ssmlToWorkWith = `${ssmlInput}`;
@@ -44,18 +46,17 @@ class SSMLSplit {
         }
         // Sanitize and create tree
         this.buildTree(this.sanitize(ssmlToWorkWith));
-        // check if SSML is wrapped with <speak> tag
+        // Check if SSML is wrapped with <speak> tag
         if (this.root.children.length === 1 && this.root.children[0].type === 'speak') {
-            // remove global <speak> tag node
+            // Remove global <speak> tag node
             // since the text will be split, new <speak> tags will wrap batches
             this.root.children = this.root.children[0].children;
         }
         if (this.root.children.length === 0) {
             return this.batches;
         }
-        // start traversing root children
+        // Start traversing root children
         this.root.children.forEach((node) => {
-            this.characterCounter = this.options.includeSSMLTagsInCounter ? this.accumulatedSSML.length : this.textLength;
             // root level - can make splits here
             if (this.characterCounter < this.options.softLimit) {
                 // Text node on the top level can be too long and become > SOFT_LIMIT and even HARD_LIMIT
@@ -86,8 +87,6 @@ class SSMLSplit {
                 throw new errors_1.NotPossibleSplitError('SSML tag appeared to be too long.');
             }
         });
-        // Process the last part
-        this.characterCounter = this.options.includeSSMLTagsInCounter ? this.accumulatedSSML.length : this.textLength;
         if (this.characterCounter !== 0) {
             if (this.characterCounter < this.options.hardLimit) {
                 this.makeSpeakBatch(this.accumulatedSSML);
@@ -97,6 +96,9 @@ class SSMLSplit {
             }
         }
         return this.batches.splice(0);
+    }
+    get characterCounter() {
+        return this.options.includeSSMLTagsInCounter ? this.accumulatedSSML.length : this.textLength;
     }
     setDefaults() {
         this.root = {
@@ -108,7 +110,6 @@ class SSMLSplit {
         this.batches = [];
         this.accumulatedSSML = '';
         this.textLength = 0;
-        this.characterCounter = 0;
     }
     sanitize(ssml) {
         return ssml.split('\n').join(' ');

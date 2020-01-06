@@ -1,4 +1,4 @@
-interface OptionsInput {
+export interface OptionsInput {
     /**
      * Default: `1500`
      *
@@ -45,7 +45,7 @@ interface OptionsInput {
      */
     breakParagraphsAboveHardLimit?: boolean;
 }
-interface Options {
+export interface Options {
     hardLimit: number;
     softLimit: number;
     includeSSMLTagsInCounter: boolean;
@@ -62,7 +62,6 @@ export declare class SSMLSplit {
     private batches;
     private accumulatedSSML;
     private textLength;
-    private characterCounter;
     constructor(options?: OptionsInput);
     /**
      * Split SSML text by batches of ~3000 (by default) chars.
@@ -71,6 +70,7 @@ export declare class SSMLSplit {
      * @throws {SSMLParseError} Argument `ssml` is not a valid SSML string.
      */
     split(ssmlInput: string): string[];
+    private get characterCounter();
     private setDefaults;
     private sanitize;
     private traverseNode;
