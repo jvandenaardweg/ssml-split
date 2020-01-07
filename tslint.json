@@ -12,6 +12,7 @@
     "no-namespace": false,
     "no-string-literal": false,
     "interface-name": false,
-    "member-access": false
+    "member-access": false,
+    "quotemark": [true, "single"]
   }
 }
