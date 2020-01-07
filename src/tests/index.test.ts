@@ -69,6 +69,18 @@ describe('constructor', () => {
     }
   });
 
+  it('Should return an error when option synthesizer uses an unknown value', () => {
+    try {
+      // @ts-ignore
+      const ssmlSplit = new SSMLSplit({
+        // @ts-ignore
+        synthesizer: 'unknown'
+      });
+    } catch (err) {
+      expect(err.message).toBe('Option `synthesizer` must be \"google\" or \"aws\".');
+    }
+  });
+
   it('Should return 5 when "softLimit: 5" is given as an option', () => {
     const ssmlSplit = new SSMLSplit({
       softLimit: 5
