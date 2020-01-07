@@ -122,9 +122,8 @@ describe('private methods', () => {
   it('setDefault should correctly reset back to the default values', () => {
     const ssml = '<speak><p>some text</p></speak>';
 
-    const ssmlSplit = new SSMLSplit({
-      includeSSMLTagsInCounter: false
-    });
+    const ssmlSplit = new SSMLSplit();
+
     ssmlSplit.split(ssml);
 
     expect(ssmlSplit['root']).toMatchObject({
@@ -177,18 +176,13 @@ describe('private methods', () => {
       </speak>
     `;
 
-    const ssmlSplit = new SSMLSplit({
-      includeSSMLTagsInCounter: false
-    });
+    const ssmlSplit = new SSMLSplit();
 
     expect(ssmlSplit['sanitize'](ssml)).toBe('<speak><p>some text</p></speak>');
   });
 
   it('makeSpeakBatch should add a new SSML string to the array', () => {
-    const ssmlSplit = new SSMLSplit({
-      softLimit: 10,
-      hardLimit: 20
-    });
+    const ssmlSplit = new SSMLSplit();
 
     ssmlSplit['makeSpeakBatch']('Lorem ipsum dolor sit amet.');
     ssmlSplit['makeSpeakBatch']('Consectetuer adipiscing elit.');
@@ -200,10 +194,7 @@ describe('private methods', () => {
   });
 
   it('buildTree should create an object tree using the SSML string', () => {
-    const ssmlSplit = new SSMLSplit({
-      softLimit: 10,
-      hardLimit: 20
-    });
+    const ssmlSplit = new SSMLSplit();
 
     ssmlSplit['buildTree'](
       '<speak><s>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</s><s>Some other sentence.</s></speak>'
