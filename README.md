@@ -78,6 +78,8 @@ INVALID_ARGUMENT: 5000 characters limit exceeded.
 ### About: breakParagraphsAboveHardLimit
 By adding the option `breakParagraphsAboveHardLimit: true` you allow the script to break up large paragraphs by removing the `<p>` and replacing the `</p>` with a `<break strength="x-strong" />`, [which results in the same pause](https://docs.aws.amazon.com/polly/latest/dg/supportedtags.html#p-tag). This allows the script to properly split large paragraphs.
 
+Using this option will result in 22 more characters, per paragraph, to your usage when using Google's Text to Speech API.
+
 If you work with large paragraphs and you do not use this option, you might run into errors like `SSML tag appeared to be too long`.
 
 
