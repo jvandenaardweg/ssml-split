@@ -2,6 +2,8 @@ import pollyTextSplit from 'polly-text-split';
 import defaults from './defaults';
 import { ConfigurationValidationError, NotPossibleSplitError, SSMLParseError } from './errors';
 
+type Synthesizer = 'google' | 'aws';
+
 export interface OptionsInput {
   /**
    * Default: `1500`
@@ -16,19 +18,6 @@ export interface OptionsInput {
    * The amount of characters the script should stay below for maximum size per SSML part. If any batch size goes above this, the script will error.
    */
   hardLimit?: number;
-  /**
-   * Default: `false`
-   *
-   * Set to `true` to include the SSML tag characters in the calculation on when to split the SSML,
-   * this is recommended when you work with Google's Text to Speech API.
-   *
-   * For example: `<speak><p>some text</p></speak>`. The default behaviour would count that as 9 characters,
-   * which is fine for AWS Polly, but not for Google's Text to Speech API.
-   * By setting this to `true` it will be count as 31 characters, just like Google's Text to Speech API counts it.
-   *
-   * This should prevent you from seeing this error when using Google's Text to Speech API: "INVALID_ARGUMENT: 5000 characters limit exceeded."
-   */
-  includeSSMLTagsInCounter?: boolean;
   /**
    * Default: `,;.`
    *
@@ -48,14 +37,22 @@ export interface OptionsInput {
    * like "SSML tag appeared to be too long".
    */
   breakParagraphsAboveHardLimit?: boolean;
+  /**
+   * Default: `aws`
+   *
+   * Set to which synthesizer you are using. Usefull for when you use `breakParagraphsAboveHardLimit: true`,
+   * to set the correct break length, as that differs per service.
+   */
+  synthesizer?: Synthesizer;
 }
 
 export interface Options {
   hardLimit: number;
   softLimit: number;
-  includeSSMLTagsInCounter: boolean;
   extraSplitChars: string;
   breakParagraphsAboveHardLimit: boolean;
+  synthesizer: Synthesizer;
+  defaultParagraphBreakSSMLTag: string;
 }
 
 interface Node  {
@@ -86,14 +83,26 @@ export class SSMLSplit {
       throw new ConfigurationValidationError('Parameter `options` must be an object.');
     }
 
+    if (options && options.synthesizer && !['google', 'aws'].includes(options.synthesizer)) {
+      throw new ConfigurationValidationError('Option `synthesizer` must be "google" or "aws".');
+    }
+
     this.setDefaults();
 
     this.options = {
       softLimit: options && options.softLimit || defaults.SOFT_LIMIT,
       hardLimit: options && options.hardLimit || defaults.HARD_LIMIT,
-      includeSSMLTagsInCounter: options && options.includeSSMLTagsInCounter ||  defaults.INCLUDE_SSML_TAGS_IN_COUNTER,
       extraSplitChars: options && options.extraSplitChars || defaults.EXTRA_SPLIT_CHARS,
-      breakParagraphsAboveHardLimit: options && options.breakParagraphsAboveHardLimit || defaults.BREAK_PARAGRAPHS_ABOVE_HARD_LIMIT
+      breakParagraphsAboveHardLimit: options && options.breakParagraphsAboveHardLimit || defaults.BREAK_PARAGRAPHS_ABOVE_HARD_LIMIT,
+      synthesizer: options && options.synthesizer || defaults.SYNTHESIZER as Synthesizer,
+
+      // Google and AWS apparently use different break strength pause lengths.
+      // AWS uses "x-strong" as the paragraph break strength.
+      // Google seems to use "x-weak"
+      // So we have to differentiate between those services here.
+      // AWS: https://docs.aws.amazon.com/polly/latest/dg/supportedtags.html#p-tag
+      // Google: no documentation available about this topic, "x-weak" seems to add the same pause as </p>
+      defaultParagraphBreakSSMLTag: options && options.synthesizer === 'google' ? defaults.GOOGLE_PARAGRAPH_BREAK_SSML_TAG : defaults.AWS_PARAGRAPH_BREAK_SSML_TAG
     };
   }
 
@@ -114,10 +123,9 @@ export class SSMLSplit {
     if (this.options.breakParagraphsAboveHardLimit && ssmlToWorkWith.length > this.options.hardLimit) {
       // Remove paragraphs and replace it with a break.
       // This allows easier break up of long paragraphs, while maintaining the proper pause at the end.
-      // Adding <break strength="x-strong" /> at the end of a paragraph is the same as wrapping your text inside a <p></p>
-      // https://docs.aws.amazon.com/polly/latest/dg/supportedtags.html#p-tag
+      // Adding <break strength="" /> at the end of a paragraph is the same as wrapping your text inside a <p></p>
       ssmlToWorkWith = ssmlToWorkWith.replace(/<p>/g, '');
-      ssmlToWorkWith = ssmlToWorkWith.replace(/<\/p>/g, '<break strength="x-strong" />');
+      ssmlToWorkWith = ssmlToWorkWith.replace(/<\/p>/g, this.options.defaultParagraphBreakSSMLTag);
     }
 
     // Sanitize and create tree
@@ -182,7 +190,7 @@ export class SSMLSplit {
     // we also need to include those in the calculation
     const outputSSMLLength = this.accumulatedSSML.length + '<speak></speak>'.length;
 
-    return this.options.includeSSMLTagsInCounter ? outputSSMLLength : this.textLength;
+    return this.options.synthesizer === 'google' ? outputSSMLLength : this.textLength;
   }
 
   private setDefaults() {
@@ -202,6 +210,10 @@ export class SSMLSplit {
     return ssml
     .replace(/\r?\n|\r/g, '') // remove new lines
     .replace(/>\s+</g, '><') // remove spaces between <tags>'s
+    .replace(/<p>\s+<\/p>/g, '') // Remove empty <p> </p>
+    .replace(/<p><\/p>/g, '') // Remove empty <p></p>
+    .replace(/<s>\s+<\/s>/g, '') // Remove empty <s> </s>
+    .replace(/<s><\/s>/g, '') // Remove empty <s></s>
     .trim(); // remove trailing and leading white space
   }
 
