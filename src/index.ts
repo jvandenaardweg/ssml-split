@@ -175,11 +175,15 @@ export class SSMLSplit {
       }
     }
 
-    return this.batches.splice(0);
+    return this.batches;
   }
 
   private get characterCounter() {
-    return this.options.includeSSMLTagsInCounter ? this.accumulatedSSML.length : this.textLength;
+    // Since we wrap the output SSML within <speak></speak> tags,
+    // we also need to include those in the calculation
+    const outputSSMLLength = this.accumulatedSSML.length + '<speak></speak>'.length;
+
+    return this.options.includeSSMLTagsInCounter ? outputSSMLLength : this.textLength;
   }
 
   private setDefaults() {
