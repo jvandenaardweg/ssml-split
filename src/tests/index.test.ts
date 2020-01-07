@@ -41,7 +41,7 @@ describe('constructor', () => {
     expect(ssmlSplit.options.defaultParagraphBreakSSMLTag).toBe(defaults.GOOGLE_PARAGRAPH_BREAK_SSML_TAG);
   });
 
-  it('Should set default options when synthesizer "google" is given.', () => {
+  it('Should set default options when synthesizer "aws" is given.', () => {
     const ssmlSplit = new SSMLSplit({
       synthesizer: 'aws'
     });
@@ -66,18 +66,6 @@ describe('constructor', () => {
       });
     } catch (err) {
       expect(err.message).toBe('Option `synthesizer` is required when using `breakParagraphsAboveHardLimit`.');
-    }
-  });
-
-  it('Should return an error when option synthesizer uses an unknown value', () => {
-    try {
-      // @ts-ignore
-      const ssmlSplit = new SSMLSplit({
-        // @ts-ignore
-        synthesizer: 'unknown'
-      });
-    } catch (err) {
-      expect(err.message).toBe('Option `synthesizer` must be \"google\" or \"aws\".');
     }
   });
 
