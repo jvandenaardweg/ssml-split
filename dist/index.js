@@ -95,10 +95,13 @@ class SSMLSplit {
                 throw new errors_1.NotPossibleSplitError('Last SSML tag appeared to be too long.');
             }
         }
-        return this.batches.splice(0);
+        return this.batches;
     }
     get characterCounter() {
-        return this.options.includeSSMLTagsInCounter ? this.accumulatedSSML.length : this.textLength;
+        // Since we wrap the output SSML within <speak></speak> tags,
+        // we also need to include those in the calculation
+        const outputSSMLLength = this.accumulatedSSML.length + '<speak></speak>'.length;
+        return this.options.includeSSMLTagsInCounter ? outputSSMLLength : this.textLength;
     }
     setDefaults() {
         this.root = {
@@ -112,7 +115,10 @@ class SSMLSplit {
         this.textLength = 0;
     }
     sanitize(ssml) {
-        return ssml.split('\n').join(' ');
+        return ssml
+            .replace(/\r?\n|\r/g, '') // remove new lines
+            .replace(/>\s+</g, '><') // remove spaces between <tags>'s
+            .trim(); // remove trailing and leading white space
     }
     traverseNode(currentNode) {
         // check if node has children to check out too
