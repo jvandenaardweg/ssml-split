@@ -14,6 +14,7 @@ Splits SSML strings into batches AWS Polly ánd Google's Text to Speech API can 
 *  Makes sure you stay below the API character limitations by configuring a `hardLimit`.
 *  Creates the least possible batch size to limit your requests to the Text to Speech API's.
 *  Will split text at the nearest `.`, `,`, `;` or space. Can be configured.
+*  Sanitizes your SSML by removing excessive white spacing, resulting in less characters used.
 *  Uses TypeScript so you can enjoy the type safety and documentation that comes with it.
 
 Based on [polly-ssml-split](https://github.com/oleglegun/polly-ssml-split) by [@oleglegun](https://github.com/oleglegun)
