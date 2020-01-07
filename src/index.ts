@@ -200,7 +200,10 @@ export class SSMLSplit {
   }
 
   private sanitize(ssml: string): string {
-    return ssml.split('\n').join(' ');
+    return ssml
+    .replace(/\r?\n|\r/g, '') // remove new lines
+    .replace(/>\s+</g, '><') // remove spaces between <tags>'s
+    .trim(); // remove trailing and leading white space
   }
 
   private traverseNode(currentNode: Node): void {
