@@ -58,6 +58,17 @@ describe('constructor', () => {
     }
   });
 
+  it('Should return an error when option breakParagraphsAboveHardLimit: true is set, but no synthesizer option is given', () => {
+    try {
+      // @ts-ignore
+      const ssmlSplit = new SSMLSplit({
+        breakParagraphsAboveHardLimit: true
+      });
+    } catch (err) {
+      expect(err.message).toBe('Option `synthesizer` is required when using `breakParagraphsAboveHardLimit`.');
+    }
+  });
+
   it('Should return 5 when "softLimit: 5" is given as an option', () => {
     const ssmlSplit = new SSMLSplit({
       softLimit: 5
@@ -90,16 +101,36 @@ describe('constructor', () => {
     expect(ssmlSplit.options.extraSplitChars).toBe('/');
   });
 
-  it('Should return true when "breakParagraphsAboveHardLimit: true" is given as an option', () => {
+  it('Should return true when "breakParagraphsAboveHardLimit: true" is given as an option with synthesizer: "google"', () => {
     const ssmlSplit = new SSMLSplit({
+      synthesizer: 'google',
       breakParagraphsAboveHardLimit: true
     });
 
     expect(ssmlSplit.options.breakParagraphsAboveHardLimit).toBe(true);
   });
 
-  it('Should return true when "breakParagraphsAboveHardLimit: false" is given as an option', () => {
+  it('Should return true when "breakParagraphsAboveHardLimit: true" is given as an option with synthesizer: "aws"', () => {
     const ssmlSplit = new SSMLSplit({
+      synthesizer: 'aws',
+      breakParagraphsAboveHardLimit: true
+    });
+
+    expect(ssmlSplit.options.breakParagraphsAboveHardLimit).toBe(true);
+  });
+
+  it('Should return true when "breakParagraphsAboveHardLimit: false" is given as an option with synthesizer: "google"', () => {
+    const ssmlSplit = new SSMLSplit({
+      synthesizer: 'google',
+      breakParagraphsAboveHardLimit: false
+    });
+
+    expect(ssmlSplit.options.breakParagraphsAboveHardLimit).toBe(false);
+  });
+
+  it('Should return true when "breakParagraphsAboveHardLimit: false" is given as an option with synthesizer: "aws"', () => {
+    const ssmlSplit = new SSMLSplit({
+      synthesizer: 'aws',
       breakParagraphsAboveHardLimit: false
     });
 
