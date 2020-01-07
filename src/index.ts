@@ -74,7 +74,6 @@ interface RootNode extends Node {
  * @class
  */
 export class SSMLSplit {
-  // Make config properties public, so we can unit test it
   public options: Options;
 
   private root: RootNode;
