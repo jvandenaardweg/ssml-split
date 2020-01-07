@@ -40,7 +40,7 @@ export interface OptionsInput {
   /**
    * Default: `aws`
    *
-   * Set to which synthesizer you are using. Usefull for when you use `breakParagraphsAboveHardLimit: true`,
+   * Set to which synthesizer you are using. Useful for when you use `breakParagraphsAboveHardLimit: true`,
    * to set the correct break length, as that differs per service.
    */
   synthesizer?: Synthesizer;
@@ -85,6 +85,10 @@ export class SSMLSplit {
 
     if (options && options.synthesizer && !['google', 'aws'].includes(options.synthesizer)) {
       throw new ConfigurationValidationError('Option `synthesizer` must be "google" or "aws".');
+    }
+
+    if (options && options.breakParagraphsAboveHardLimit && !options.synthesizer) {
+      throw new ConfigurationValidationError('Option `synthesizer` is required when using `breakParagraphsAboveHardLimit`.');
     }
 
     this.setDefaults();
