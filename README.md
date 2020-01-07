@@ -10,22 +10,21 @@ Splits SSML strings into batches AWS Polly ánd Google's Text to Speech API can 
 
 ## Features
 
-* Splits your large SSML into batches AWS Polly and Google's Text to Speech API can consume.
-* Makes sure you stay below the API character limitations by configuring a `hardLimit`.
-* Creates the least possible batch size to limit your requests to the Text to Speech API's.
-* Will split text at the nearest `.`, `,`, `;` or space. Can be configured.
-* Uses TypeScript so you can enjoy the type safety and documentation that comes with it.
+*  Splits your large SSML into batches AWS Polly and Google's Text to Speech API can consume.
+*  Makes sure you stay below the API character limitations by configuring a `hardLimit`.
+*  Creates the least possible batch size to limit your requests to the Text to Speech API's.
+*  Will split text at the nearest `.`, `,`, `;` or space. Can be configured.
+*  Uses TypeScript so you can enjoy the type safety and documentation that comes with it.
 
 Based on [polly-ssml-split](https://github.com/oleglegun/polly-ssml-split) by [@oleglegun](https://github.com/oleglegun)
 
 ## Documentation
 
-* [Installation](#installation) - Walk through how to install SSML Split.
-* [Usage](#usage) - Read how SSML Split works with the available options.
-* [Recommended Options](#recommended-options) - Use these options to get started quickly.
-* [Contributing](./CONTRIBUTING.md) - Become familiar with how to contribute back to SSML Split
-* [Code of Conduct](./CODE_OF_CONDUCT.md) - Be a good citizen by following these repository rules
-
+*  [Installation](#installation) - Walk through how to install SSML Split.
+*  [Usage](#usage) - Read how SSML Split works with the available options.
+*  [Recommended Options](#recommended-options) - Use these options to get started quickly.
+*  [Contributing](./CONTRIBUTING.md) - Become familiar with how to contribute back to SSML Split
+*  [Code of Conduct](./CODE_OF_CONDUCT.md) - Be a good citizen by following these repository rules
 
 ## Installation
 Install the package with:
@@ -54,11 +53,11 @@ const batches = ssmlSplit.split('<speak>your long ssml here</speak>');
 
 | Option              | Type | Default                       | Description                                                                           |
 | ------------------- | ---- | ------------------------- | ------------------------------------------------------------------------------------- |
-| `softLimit`                     | `number` | `1500`  | The amount of characters the script will start trying to break-up your SSML in multiple parts. You can tweak this number to see what works for you. |
-| `hardLimit`                     | `number` | `3000`  | The amount of characters the script should stay below for maximum size per SSML part. If any batch size goes above this, the script will error. |
-| `includeSSMLTagsInCounter`      | `boolean` | `false` | Set to `true` to include the SSML tag characters in the calculation on when to split the SSML. This is recommended when you work with Google's Text to Speech API. Set to `false` to only include text characters in the calculation, which is recommended for AWS Polly. |
+| `softLimit` | `number` | `1500`  | The amount of characters the script will start trying to break-up your SSML in multiple parts. You can tweak this number to see what works for you. |
+| `hardLimit` | `number` | `3000`  | The amount of characters the script should stay below for maximum size per SSML part. If any batch size goes above this, the script will error. |
+| `includeSSMLTagsInCounter` | `boolean` | `false` | Set to `true` to include the SSML tag characters in the calculation on when to split the SSML. This is recommended when you work with Google's Text to Speech API. Set to `false` to only include text characters in the calculation, which is recommended for AWS Polly. |
 | `breakParagraphsAboveHardLimit` | `boolean` | `false` | Set to `true` to allow the script to break up large paragraphs by removing the `<p>` and replacing the `</p>` with a `<break strength="x-strong" />`, [which results in the same pause](https://docs.aws.amazon.com/polly/latest/dg/supportedtags.html#p-tag). |
-| `extraSplitChars`               | `string` | `,;.` | Characters that can be used as split markers for plain text.
+| `extraSplitChars` | `string` | `,;.` | Characters that can be used as split markers for plain text.
 
 ### About: includeSSMLTagsInCounter
 By adding the option `includeSSMLTagsInCounter: true` to include the SSML tag characters in the calculation on when to split the SSML, makes the library also work with Google's Text to Speech API.
@@ -72,7 +71,7 @@ With `includeSSMLTagsInCounter: true` it will be count as 31 characters, [just l
 
 This should prevent you from seeing this error when using Google's Text to Speech API:
 
-```
+```bash
 INVALID_ARGUMENT: 5000 characters limit exceeded.
 ```
 
@@ -109,11 +108,11 @@ new SSMLSplit({
 The [polly-ssml-split](https://github.com/oleglegun/polly-ssml-split) by [@oleglegun](https://github.com/oleglegun) library already handles splitting of SSML correctly for AWS Polly, but wasn't working properly for Google's Text to Speech. So I just modified the package to fit my needs.
 
 ### Changes compared to `polly-ssml-split`:
-- Added `includeSSMLTagsInCounter` option to count characters based on the complete SSML tag and not just the included text characters. Which is required if you work with Google's Text to Speech API.
-- Rewrote the library to use Typescript, so you get correct type checking in your Typescript project.
-- Removed the `.configure` method and use the class constructor method for it instead.
-- Added `breakParagraphsAboveHardLimit` options to break up large paragraphs by removing the `<p>` and replacing the `</p>` with a `<break strength="x-strong" />` [which results in the same pause](https://docs.aws.amazon.com/polly/latest/dg/supportedtags.html#p-tag). This allows the script to properly split the paragraph and to send less batches to the text to speech API's.
-- Added more tests using Jest.
+*  Added `includeSSMLTagsInCounter` option to count characters based on the complete SSML tag and not just the included text characters. Which is required if you work with Google's Text to Speech API.
+*  Rewrote the library to use Typescript, so you get correct type checking in your Typescript project.
+*  Removed the `.configure` method and use the class constructor method for it instead.
+*  Added `breakParagraphsAboveHardLimit` options to break up large paragraphs by removing the `<p>` and replacing the `</p>` with a `<break strength="x-strong" />` [which results in the same pause](https://docs.aws.amazon.com/polly/latest/dg/supportedtags.html#p-tag). This allows the script to properly split the paragraph and to send less batches to the text to speech API's.
+*  Added more tests using Jest.
 
 ## Development
 
