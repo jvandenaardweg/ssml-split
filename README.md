@@ -4,6 +4,7 @@ Splits SSML strings into batches AWS Polly ánd Google's Text to Speech API can 
 
 [![Build Status](https://img.shields.io/github/workflow/status/jvandenaardweg/ssml-split/Publish%20NPM%20Package)](https://github.com/jvandenaardweg/ssml-split/actions)
 [![NPM Package](https://img.shields.io/npm/dm/ssml-split.svg)](https://npmjs.com/package/ssml-split)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0397a395ee25486395d49ababf9407d9)](https://www.codacy.com/manual/jvandenaardweg/ssml-split?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jvandenaardweg/ssml-split&amp;utm_campaign=Badge_Grade)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 ![Twitter Follow](https://img.shields.io/twitter/follow/jvandenaardweg?style=social)
 
