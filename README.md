@@ -131,6 +131,11 @@ Run tests on file change:
 $ npm test:watch
 ```
 
+Build Typescript to Javascript:
+```bash
+$ npm run build
+```
+
 Run all tests:
 
 ```bash
