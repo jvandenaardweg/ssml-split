@@ -223,10 +223,15 @@ describe('private methods', () => {
     const ssml = `
       <speak>
         <p>some text</p>
+
+        
         <s></s>
         <p></p>
         <s> </s>
         <p> </p>
+        <p>   </p>
+        <p/>
+        <s/>
       </speak>
     `;
 

@@ -210,6 +210,11 @@ export class SSMLSplit {
     this.textLength = 0;
   }
 
+  /**
+   * Sanitizes the input SSML by removing new lines, excessive white spaces, and empty tags.
+   *
+   * @param ssml
+   */
   private sanitize(ssml: string): string {
     return ssml
     .replace(/\r?\n|\r/g, '') // remove new lines
@@ -218,6 +223,8 @@ export class SSMLSplit {
     .replace(/<p><\/p>/g, '') // Remove empty <p></p>
     .replace(/<s>\s+<\/s>/g, '') // Remove empty <s> </s>
     .replace(/<s><\/s>/g, '') // Remove empty <s></s>
+    .replace(/<s\/>/g, '') // Remove self-closing <s/>
+    .replace(/<p\/>/g, '') // Remove self-closing <p/>
     .trim(); // remove trailing and leading white space
   }
 
