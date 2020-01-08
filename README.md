@@ -42,10 +42,14 @@ Import the package and set the options. Use the `.split()` method to split your 
 import SSMLSplit from 'ssml-split';
 
 const ssmlSplit = new SSMLSplit({
-  synthesizer: 'google', // or 'aws'
-  softLimit: 4000, // Finds a possible split moment starting from 4000 characters
-  hardLimit: 5000, // Google Text to Speech limitation
-  breakParagraphsAboveHardLimit: true // Allow to split large paragraphs, set to false to keep your <p></p> intact
+  // The service you are using: "google" or "aws"
+  synthesizer: 'google',
+  // Finds a possible split moment starting from 4000 characters
+  softLimit: 4000,
+  // Google Text to Speech limitation
+  hardLimit: 5000,
+  // Allow to split large paragraphs, set to false to keep your <p></p> intact
+  breakParagraphsAboveHardLimit: true
 });
 
 const batches = ssmlSplit.split('<speak>your long ssml here</speak>');
