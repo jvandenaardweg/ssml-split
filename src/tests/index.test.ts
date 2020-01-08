@@ -8,6 +8,8 @@ import {
   ssmlExampleLargeSingleParagraph
 } from './ssml-examples';
 
+import { textExampleLarge, textExampleLargeSentence } from './text-examples';
+
 const GOOGLE_SOFT_LIMIT = 4000;
 const GOOGLE_HARD_LIMIT = 5000;
 
@@ -628,10 +630,58 @@ describe('Google Text to Speech API limitations', () => {
       expect(item.length).toBeLessThanOrEqual(GOOGLE_HARD_LIMIT);
     });
   });
+
+  it(`Should return the correct SSML chunks when the input text (${textExampleLarge.length} characters) goes above the hardLimit`, () => {
+    const text = textExampleLarge
+
+    const expected = [
+      '<speak>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi imperdiet dui in mattis fringilla. Vivamus scelerisque id erat eu imperdiet. Mauris eu neque sit amet lectus facilisis tristique. Vestibulum finibus quam vel tempus tempor. Donec in mollis augue. Duis hendrerit aliquam tortor at volutpat. Vivamus ac fringilla arcu, eget bibendum enim.Cras consectetur, dui vel aliquet tincidunt, velit nisl lacinia sem, non accumsan risus est at mauris. Vestibulum dignissim metus nec nisl dignissim, at volutpat libero dignissim. Sed sollicitudin lacus felis, quis vehicula nisi fermentum eget. Nullam venenatis, orci ac bibendum pharetra, justo turpis consequat orci, vitae lobortis mauris mauris a mi. In ut consequat lectus. Curabitur purus metus, vestibulum a mauris in, gravida egestas enim. Nunc diam erat, interdum in hendrerit vel, consectetur in ex. Mauris est dui, varius sed nunc sit amet, aliquam pellentesque justo. Sed placerat quis dui in blandit. Nullam porta leo ipsum, sit amet maximus mi mollis et. Donec ac lectus dolor. Mauris dictum libero dignissim tincidunt aliquam. Aliquam quis urna ac ligula lobortis vulputate quis porta ligula. Etiam semper ante non risus ultricies rutrum.Aliquam eu facilisis sem, eu maximus felis. Aenean quis ultricies augue, a tincidunt lacus. Nunc vitae massa vestibulum, malesuada sem eget, iaculis ante. Aliquam lorem velit, iaculis at ipsum non, facilisis vulputate lorem. Aenean fermentum imperdiet eleifend. Pellentesque magna ipsum, varius vel tortor in, dignissim faucibus est. Nullam velit nisl, accumsan in tellus id, suscipit varius massaAliquam eget mauris at felis bibendum semper. Ut ultrices dui eu orci ultricies molestie. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam sit amet posuere eros, sed tincidunt est. Mauris lobortis tempor nulla id elementum. Etiam gravida arcu et nibh vulputate dapibus. Aliquam eget tempus diamNullam quis ullamcorper erat. Vestibulum ultricies erat quis leo efficitur consequat. Ut id risus facilisis, ornare sem at, rutrum tellus. Donec a urna odio. Ut et nisl quis enim dignissim sodales. Vestibulum risus augue, posuere id tortor vitae, efficitur fermentum massa. Etiam at eros rhoncus, aliquet tellus interdum, vestibulum nibh. Phasellus consequat velit quis mi lobortis varius. Phasellus semper purus nec tellus fringilla condimentum. Morbi cursus nec ante eget porttitor. Vestibulum vestibulum arcu sit amet elit congue tristique. Nulla eleifend purus non ornare interdum. Aliquam quis nulla aliquet, mattis dolor nec, auctor massa. Vestibulum placerat placerat ante sit amet laciniaLorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi imperdiet dui in mattis fringilla. Vivamus scelerisque id erat eu imperdiet. Mauris eu neque sit amet lectus facilisis tristique. Vestibulum finibus quam vel tempus tempor. Donec in mollis augue. Duis hendrerit aliquam tortor at volutpat. Vivamus ac fringilla arcu, eget bibendum enimCras consectetur, dui vel aliquet tincidunt, velit nisl lacinia sem, non accumsan risus est at mauris. Vestibulum dignissim metus nec nisl dignissim, at volutpat libero dignissim. Sed sollicitudin lacus felis, quis vehicula nisi fermentum eget. Nullam venenatis, orci ac bibendum pharetra, justo turpis consequat orci, vitae lobortis mauris mauris a mi. In ut consequat lectus. Curabitur purus metus, vestibulum a mauris in, gravida egestas enim. Nunc diam erat, interdum in hendrerit vel, consectetur in ex. Mauris est dui, varius sed nunc sit amet, aliquam pellentesque justo. Sed placerat quis dui in blandit. Nullam porta leo ipsum, sit amet maximus mi mollis et. Donec ac lectus dolor. Mauris dictum libero dignissim tincidunt aliquam. Aliquam quis urna ac ligula lobortis vulputate quis porta ligula. Etiam semper ante non risus ultricies rutrumAliquam eu facilisis sem, eu maximus felis. Aenean quis ultricies augue, a tincidunt lacus. Nunc vitae massa vestibulum, malesuada sem eget, iaculis ante. Aliquam lorem velit, iaculis at ipsum non, facilisis vulputate lorem. Aenean fermentum imperdiet eleifend. Pellentesque magna ipsum, varius vel tortor in, dignissim faucibus est. Nullam velit nisl, accumsan in tellus id, suscipit varius massaAliquam eget mauris at felis bibendum semper. Ut ultrices dui eu orci ultricies molestie. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam sit amet posuere eros, sed tincidunt est. Mauris lobortis tempor nulla id elementum. Etiam gravida arcu et nibh vulputate dapibus. Aliquam eget tempus diam Nullam quis ullamcorper erat. Vestibulum ultricies erat quis leo efficitur consequat. Ut id risus facilisis, ornare sem at, rutrum tellus. Donec a urna odio. Ut et nisl quis enim dignissim sodales. Vestibulum risus augue, posuere id tortor vitae, efficitur fermentum massa. Etiam at eros rhoncus, aliquet tellus interdum, vestibulum nibh. Phasellus consequat velit quis mi lobortis varius.</speak>',
+      '<speak> Phasellus semper purus nec tellus fringilla condimentum. Morbi cursus nec ante eget porttitor. Vestibulum vestibulum arcu sit amet elit congue tristique. Nulla eleifend purus non ornare interdum. Aliquam quis nulla aliquet, mattis dolor nec, auctor massa. Vestibulum placerat placerat ante sit amet lacinia.</speak>'
+    ];
+
+    const ssmlSplit = new SSMLSplit({
+      synthesizer: 'google',
+      softLimit: GOOGLE_SOFT_LIMIT,
+      hardLimit: GOOGLE_HARD_LIMIT,
+      breakParagraphsAboveHardLimit: true
+    });
+
+    const result = ssmlSplit.split(text);
+
+    expect(result).toStrictEqual(expected);
+
+    result.forEach(item => {
+      expect(item.length).toBeLessThanOrEqual(GOOGLE_HARD_LIMIT);
+    });
+  });
+
+  it(`Should return the correct SSML chunks when the input text (${textExampleLargeSentence.length} characters) without any punctuation goes above the hardLimit`, () => {
+    const text = textExampleLargeSentence
+
+    const expected = [
+      '<speak>Lorem ipsum dolor sit amet consectetur adipiscing elit Morbi imperdiet dui in mattis fringilla Vivamus scelerisque id erat eu imperdiet Mauris eu neque sit amet lectus facilisis tristique Vestibulum finibus quam vel tempus tempor Donec in mollis augue Duis hendrerit aliquam tortor at volutpat Vivamus ac fringilla arcu eget bibendum enim.Cras consectetur dui vel aliquet tincidunt velit nisl lacinia sem non accumsan risus est at mauris Vestibulum dignissim metus nec nisl dignissim at volutpat libero dignissim Sed sollicitudin lacus felis quis vehicula nisi fermentum eget Nullam venenatis orci ac bibendum pharetra justo turpis consequat orci vitae lobortis mauris mauris a mi In ut consequat lectus Curabitur purus metus vestibulum a mauris in gravida egestas enim Nunc diam erat interdum in hendrerit vel consectetur in ex Mauris est dui varius sed nunc sit amet aliquam pellentesque justo Sed placerat quis dui in blandit Nullam porta leo ipsum sit amet maximus mi mollis et Donec ac lectus dolor Mauris dictum libero dignissim tincidunt aliquam Aliquam quis urna ac ligula lobortis vulputate quis porta ligula Etiam semper ante non risus ultricies rutrum.Aliquam eu facilisis sem eu maximus felis Aenean quis ultricies augue a tincidunt lacus Nunc vitae massa vestibulum malesuada sem eget iaculis ante Aliquam lorem velit iaculis at ipsum non facilisis vulputate lorem Aenean fermentum imperdiet eleifend Pellentesque magna ipsum varius vel tortor in dignissim faucibus est Nullam velit nisl accumsan in tellus id suscipit varius massaAliquam eget mauris at felis bibendum semper Ut ultrices dui eu orci ultricies molestie Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam sit amet posuere eros sed tincidunt est Mauris lobortis tempor nulla id elementum Etiam gravida arcu et nibh vulputate dapibus Aliquam eget tempus diamNullam quis ullamcorper erat Vestibulum ultricies erat quis leo efficitur consequat Ut id risus facilisis ornare sem at rutrum tellus Donec a urna odio Ut et nisl quis enim dignissim sodales Vestibulum risus augue posuere id tortor vitae efficitur fermentum massa Etiam at eros rhoncus aliquet tellus interdum vestibulum nibh Phasellus consequat velit quis mi lobortis varius Phasellus semper purus nec tellus fringilla condimentum Morbi cursus nec ante eget porttitor Vestibulum vestibulum arcu sit amet elit congue tristique Nulla eleifend purus non ornare interdum Aliquam quis nulla aliquet mattis dolor nec auctor massa Vestibulum placerat placerat ante sit amet laciniaLorem ipsum dolor sit amet consectetur adipiscing elit Morbi imperdiet dui in mattis fringilla Vivamus scelerisque id erat eu imperdiet Mauris eu neque sit amet lectus facilisis tristique Vestibulum finibus quam vel tempus tempor Donec in mollis augue Duis hendrerit aliquam tortor at volutpat Vivamus ac fringilla arcu eget bibendum enimCras consectetur dui vel aliquet tincidunt velit nisl lacinia sem non accumsan risus est at mauris Vestibulum dignissim metus nec nisl dignissim at volutpat libero dignissim Sed sollicitudin lacus felis quis vehicula nisi fermentum eget Nullam venenatis orci ac bibendum pharetra justo turpis consequat orci vitae lobortis mauris mauris a mi In ut consequat lectus Curabitur purus metus vestibulum a mauris in gravida egestas enim Nunc diam erat interdum in hendrerit vel consectetur in ex Mauris est dui varius sed nunc sit amet aliquam pellentesque justo Sed placerat quis dui in blandit Nullam porta leo ipsum sit amet maximus mi mollis et Donec ac lectus dolor Mauris dictum libero dignissim tincidunt aliquam Aliquam quis urna ac ligula lobortis vulputate quis porta ligula Etiam semper ante non risus ultricies rutrumAliquam eu facilisis sem eu maximus felis Aenean quis ultricies augue a tincidunt lacus Nunc vitae massa vestibulum malesuada sem eget iaculis ante Aliquam lorem velit iaculis at ipsum non facilisis vulputate lorem Aenean fermentum imperdiet eleifend Pellentesque magna ipsum varius vel tortor in dignissim faucibus est Nullam velit nisl accumsan in tellus id suscipit varius massaAliquam eget mauris at felis bibendum semper Ut ultrices dui eu orci ultricies molestie Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;</speak>',
+      '<speak> Nam sit amet posuere eros sed tincidunt est Mauris lobortis tempor nulla id elementum Etiam gravida arcu et nibh vulputate dapibus Aliquam eget tempus diam Nullam quis ullamcorper erat Vestibulum ultricies erat quis leo efficitur consequat Ut id risus facilisis ornare sem at rutrum tellus Donec a urna odio Ut et nisl quis enim dignissim sodales Vestibulum risus augue posuere id tortor vitae efficitur fermentum massa Etiam at eros rhoncus aliquet tellus interdum vestibulum nibh Phasellus consequat velit quis mi lobortis varius Phasellus semper purus nec tellus fringilla condimentum Morbi cursus nec ante eget porttitor Vestibulum vestibulum arcu sit amet elit congue tristique Nulla eleifend purus non ornare interdum Aliquam quis nulla aliquet mattis dolor nec auctor massa Vestibulum placerat placerat ante sit amet lacinia</speak>'
+    ];
+
+    const ssmlSplit = new SSMLSplit({
+      synthesizer: 'google',
+      softLimit: GOOGLE_SOFT_LIMIT,
+      hardLimit: GOOGLE_HARD_LIMIT,
+      breakParagraphsAboveHardLimit: true
+    });
+
+    const result = ssmlSplit.split(text);
+
+    expect(result).toStrictEqual(expected);
+
+    result.forEach(item => {
+      expect(item.length).toBeLessThanOrEqual(GOOGLE_HARD_LIMIT);
+    });
+  });
 });
 
 describe('AWS Polly limitations', () => {
-  it(`Should return the correct SSML chunks when the input SSML (${ssmlExampleLargeMultipleParagraphs.length}) goes above the hardLimit`, () => {
+  it(`Should return the correct SSML chunks when the input SSML (${ssmlExampleLargeMultipleParagraphs.length} characters) goes above the hardLimit`, () => {
     const ssml = ssmlExampleLargeMultipleParagraphs;
 
     const expected = [
@@ -727,6 +777,56 @@ describe('AWS Polly limitations', () => {
     });
 
     const result = ssmlSplit.split(largeExample);
+
+    expect(result).toStrictEqual(expected);
+
+    result.forEach(item => {
+      const characterCountHowAWSCountsIt = removeSSMLTags(item).length;
+      expect(characterCountHowAWSCountsIt).toBeLessThanOrEqual(AWS_HARD_LIMIT);
+    });
+  });
+
+  it(`Should return the correct SSML chunks when the input text (${textExampleLarge.length} characters) goes above the hardLimit`, () => {
+    const text = textExampleLarge
+
+    const expected = [
+      '<speak>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi imperdiet dui in mattis fringilla. Vivamus scelerisque id erat eu imperdiet. Mauris eu neque sit amet lectus facilisis tristique. Vestibulum finibus quam vel tempus tempor. Donec in mollis augue. Duis hendrerit aliquam tortor at volutpat. Vivamus ac fringilla arcu, eget bibendum enim.Cras consectetur, dui vel aliquet tincidunt, velit nisl lacinia sem, non accumsan risus est at mauris. Vestibulum dignissim metus nec nisl dignissim, at volutpat libero dignissim. Sed sollicitudin lacus felis, quis vehicula nisi fermentum eget. Nullam venenatis, orci ac bibendum pharetra, justo turpis consequat orci, vitae lobortis mauris mauris a mi. In ut consequat lectus. Curabitur purus metus, vestibulum a mauris in, gravida egestas enim. Nunc diam erat, interdum in hendrerit vel, consectetur in ex. Mauris est dui, varius sed nunc sit amet, aliquam pellentesque justo. Sed placerat quis dui in blandit. Nullam porta leo ipsum, sit amet maximus mi mollis et. Donec ac lectus dolor. Mauris dictum libero dignissim tincidunt aliquam. Aliquam quis urna ac ligula lobortis vulputate quis porta ligula. Etiam semper ante non risus ultricies rutrum.Aliquam eu facilisis sem, eu maximus felis. Aenean quis ultricies augue, a tincidunt lacus. Nunc vitae massa vestibulum, malesuada sem eget, iaculis ante. Aliquam lorem velit, iaculis at ipsum non, facilisis vulputate lorem. Aenean fermentum imperdiet eleifend. Pellentesque magna ipsum, varius vel tortor in, dignissim faucibus est. Nullam velit nisl, accumsan in tellus id, suscipit varius massaAliquam eget mauris at felis bibendum semper. Ut ultrices dui eu orci ultricies molestie. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam sit amet posuere eros, sed tincidunt est. Mauris lobortis tempor nulla id elementum. Etiam gravida arcu et nibh vulputate dapibus. Aliquam eget tempus diamNullam quis ullamcorper erat. Vestibulum ultricies erat quis leo efficitur consequat. Ut id risus facilisis, ornare sem at, rutrum tellus. Donec a urna odio. Ut et nisl quis enim dignissim sodales. Vestibulum risus augue, posuere id tortor vitae, efficitur fermentum massa. Etiam at eros rhoncus, aliquet tellus interdum, vestibulum nibh. Phasellus consequat velit quis mi lobortis varius. Phasellus semper purus nec tellus fringilla condimentum. Morbi cursus nec ante eget porttitor. Vestibulum vestibulum arcu sit amet elit congue tristique. Nulla eleifend purus non ornare interdum. Aliquam quis nulla aliquet, mattis dolor nec, auctor massa. Vestibulum placerat placerat ante sit amet laciniaLorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi imperdiet dui in mattis fringilla. Vivamus scelerisque id erat eu imperdiet. Mauris eu neque sit amet lectus facilisis tristique. Vestibulum finibus quam vel tempus tempor. Donec in mollis augue. Duis hendrerit aliquam tortor at volutpat.</speak>',
+      '<speak> Vivamus ac fringilla arcu, eget bibendum enimCras consectetur, dui vel aliquet tincidunt, velit nisl lacinia sem, non accumsan risus est at mauris. Vestibulum dignissim metus nec nisl dignissim, at volutpat libero dignissim. Sed sollicitudin lacus felis, quis vehicula nisi fermentum eget. Nullam venenatis, orci ac bibendum pharetra, justo turpis consequat orci, vitae lobortis mauris mauris a mi. In ut consequat lectus. Curabitur purus metus, vestibulum a mauris in, gravida egestas enim. Nunc diam erat, interdum in hendrerit vel, consectetur in ex. Mauris est dui, varius sed nunc sit amet, aliquam pellentesque justo. Sed placerat quis dui in blandit. Nullam porta leo ipsum, sit amet maximus mi mollis et. Donec ac lectus dolor. Mauris dictum libero dignissim tincidunt aliquam. Aliquam quis urna ac ligula lobortis vulputate quis porta ligula. Etiam semper ante non risus ultricies rutrumAliquam eu facilisis sem, eu maximus felis. Aenean quis ultricies augue, a tincidunt lacus. Nunc vitae massa vestibulum, malesuada sem eget, iaculis ante. Aliquam lorem velit, iaculis at ipsum non, facilisis vulputate lorem. Aenean fermentum imperdiet eleifend. Pellentesque magna ipsum, varius vel tortor in, dignissim faucibus est. Nullam velit nisl, accumsan in tellus id, suscipit varius massaAliquam eget mauris at felis bibendum semper. Ut ultrices dui eu orci ultricies molestie. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam sit amet posuere eros, sed tincidunt est. Mauris lobortis tempor nulla id elementum. Etiam gravida arcu et nibh vulputate dapibus. Aliquam eget tempus diam Nullam quis ullamcorper erat. Vestibulum ultricies erat quis leo efficitur consequat. Ut id risus facilisis, ornare sem at, rutrum tellus. Donec a urna odio. Ut et nisl quis enim dignissim sodales. Vestibulum risus augue, posuere id tortor vitae, efficitur fermentum massa. Etiam at eros rhoncus, aliquet tellus interdum, vestibulum nibh. Phasellus consequat velit quis mi lobortis varius. Phasellus semper purus nec tellus fringilla condimentum. Morbi cursus nec ante eget porttitor. Vestibulum vestibulum arcu sit amet elit congue tristique. Nulla eleifend purus non ornare interdum. Aliquam quis nulla aliquet, mattis dolor nec, auctor massa. Vestibulum placerat placerat ante sit amet lacinia.</speak>'
+    ];
+
+    const ssmlSplit = new SSMLSplit({
+      synthesizer: 'aws',
+      softLimit: AWS_SOFT_LIMIT,
+      hardLimit: AWS_HARD_LIMIT,
+      breakParagraphsAboveHardLimit: true
+    });
+
+    const result = ssmlSplit.split(text);
+
+    expect(result).toStrictEqual(expected);
+
+    result.forEach(item => {
+      const characterCountHowAWSCountsIt = removeSSMLTags(item).length;
+      expect(characterCountHowAWSCountsIt).toBeLessThanOrEqual(AWS_HARD_LIMIT);
+    });
+  });
+
+  it(`Should return the correct SSML chunks when the input text (${textExampleLargeSentence.length} characters) without any punctuation goes above the hardLimit`, () => {
+    const text = textExampleLargeSentence
+
+    const expected = [
+      '<speak>Lorem ipsum dolor sit amet consectetur adipiscing elit Morbi imperdiet dui in mattis fringilla Vivamus scelerisque id erat eu imperdiet Mauris eu neque sit amet lectus facilisis tristique Vestibulum finibus quam vel tempus tempor Donec in mollis augue Duis hendrerit aliquam tortor at volutpat Vivamus ac fringilla arcu eget bibendum enim.Cras consectetur dui vel aliquet tincidunt velit nisl lacinia sem non accumsan risus est at mauris Vestibulum dignissim metus nec nisl dignissim at volutpat libero dignissim Sed sollicitudin lacus felis quis vehicula nisi fermentum eget Nullam venenatis orci ac bibendum pharetra justo turpis consequat orci vitae lobortis mauris mauris a mi In ut consequat lectus Curabitur purus metus vestibulum a mauris in gravida egestas enim Nunc diam erat interdum in hendrerit vel consectetur in ex Mauris est dui varius sed nunc sit amet aliquam pellentesque justo Sed placerat quis dui in blandit Nullam porta leo ipsum sit amet maximus mi mollis et Donec ac lectus dolor Mauris dictum libero dignissim tincidunt aliquam Aliquam quis urna ac ligula lobortis vulputate quis porta ligula Etiam semper ante non risus ultricies rutrum.Aliquam eu facilisis sem eu maximus felis Aenean quis ultricies augue a tincidunt lacus Nunc vitae massa vestibulum malesuada sem eget iaculis ante Aliquam lorem velit iaculis at ipsum non facilisis vulputate lorem Aenean fermentum imperdiet eleifend Pellentesque magna ipsum varius vel tortor in dignissim faucibus est Nullam velit nisl accumsan in tellus id suscipit varius massaAliquam eget mauris at felis bibendum semper Ut ultrices dui eu orci ultricies molestie Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam sit amet posuere eros sed tincidunt est Mauris lobortis tempor nulla id elementum Etiam gravida arcu et nibh vulputate dapibus Aliquam eget tempus diamNullam quis ullamcorper erat Vestibulum ultricies erat quis leo efficitur consequat Ut id risus facilisis ornare sem at rutrum tellus Donec a urna odio Ut et nisl quis enim dignissim sodales Vestibulum risus augue posuere id tortor vitae efficitur fermentum massa Etiam at eros rhoncus aliquet tellus interdum vestibulum nibh Phasellus consequat velit quis mi lobortis varius Phasellus semper purus nec tellus fringilla condimentum Morbi cursus nec ante eget porttitor Vestibulum vestibulum arcu sit amet elit congue tristique Nulla eleifend purus non ornare interdum Aliquam quis nulla aliquet mattis dolor nec auctor massa Vestibulum placerat placerat ante sit amet laciniaLorem ipsum dolor sit amet consectetur adipiscing elit Morbi imperdiet dui in mattis fringilla Vivamus scelerisque id erat eu imperdiet Mauris eu neque sit amet lectus facilisis tristique Vestibulum finibus quam vel tempus tempor Donec in mollis augue Duis hendrerit aliquam tortor at volutpat Vivamus ac fringilla arcu eget bibendum enimCras consectetur dui vel aliquet tincidunt velit nisl lacinia sem non accumsan risus est at mauris Vestibulum </speak>',
+      '<speak>dignissim metus nec nisl dignissim at volutpat libero dignissim Sed sollicitudin lacus felis quis vehicula nisi fermentum eget Nullam venenatis orci ac bibendum pharetra justo turpis consequat orci vitae lobortis mauris mauris a mi In ut consequat lectus Curabitur purus metus vestibulum a mauris in gravida egestas enim Nunc diam erat interdum in hendrerit vel consectetur in ex Mauris est dui varius sed nunc sit amet aliquam pellentesque justo Sed placerat quis dui in blandit Nullam porta leo ipsum sit amet maximus mi mollis et Donec ac lectus dolor Mauris dictum libero dignissim tincidunt aliquam Aliquam quis urna ac ligula lobortis vulputate quis porta ligula Etiam semper ante non risus ultricies rutrumAliquam eu facilisis sem eu maximus felis Aenean quis ultricies augue a tincidunt lacus Nunc vitae massa vestibulum malesuada sem eget iaculis ante Aliquam lorem velit iaculis at ipsum non facilisis vulputate lorem Aenean fermentum imperdiet eleifend Pellentesque magna ipsum varius vel tortor in dignissim faucibus est Nullam velit nisl accumsan in tellus id suscipit varius massaAliquam eget mauris at felis bibendum semper Ut ultrices dui eu orci ultricies molestie Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam sit amet posuere eros sed tincidunt est Mauris lobortis tempor nulla id elementum Etiam gravida arcu et nibh vulputate dapibus Aliquam eget tempus diam Nullam quis ullamcorper erat Vestibulum ultricies erat quis leo efficitur consequat Ut id risus facilisis ornare sem at rutrum tellus Donec a urna odio Ut et nisl quis enim dignissim sodales Vestibulum risus augue posuere id tortor vitae efficitur fermentum massa Etiam at eros rhoncus aliquet tellus interdum vestibulum nibh Phasellus consequat velit quis mi lobortis varius Phasellus semper purus nec tellus fringilla condimentum Morbi cursus nec ante eget porttitor Vestibulum vestibulum arcu sit amet elit congue tristique Nulla eleifend purus non ornare interdum Aliquam quis nulla aliquet mattis dolor nec auctor massa Vestibulum placerat placerat ante sit amet lacinia</speak>'
+    ];
+
+    const ssmlSplit = new SSMLSplit({
+      synthesizer: 'aws',
+      softLimit: AWS_SOFT_LIMIT,
+      hardLimit: AWS_HARD_LIMIT,
+      breakParagraphsAboveHardLimit: true
+    });
+
+    const result = ssmlSplit.split(text);
 
     expect(result).toStrictEqual(expected);
 

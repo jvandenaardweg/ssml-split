@@ -57,7 +57,7 @@ const batches = ssmlSplit.split('<speak>your long ssml here</speak>');
 | `synthesizer` | `string` | `aws`  | Set to which synthesizer you are using. Useful for when you use `breakParagraphsAboveHardLimit`. It allows the library to determine the correct break length, as that differs per synthesizer service. |
 | `softLimit` | `number` | `1500`  | The amount of characters the script will start trying to break-up your SSML in multiple parts. You can tweak this number to see what works for you. |
 | `hardLimit` | `number` | `3000`  | The amount of characters the script should stay below for maximum size per SSML part. If any batch size goes above this, the script will error. |
-| `breakParagraphsAboveHardLimit` | `boolean` | `false` | Set to `true` to allow the script to break up large paragraphs by removing the `<p>` and replacing the `</p>` with a `<break strength="x-strong" />` (for `aws`) or `<break strength="x-weak" />` (for `google`). Which results in the same pause. |
+| `breakParagraphsAboveHardLimit` | `boolean` | `false` | Set to `true` to allow the script to break up large paragraphs by removing the `<p>` and replacing the `</p>` with a `<break strength="x-strong" />` (for `aws`) or `<break strength="x-weak" />` (for `google`). Which results in the same pause. Requires option `synthesizer` to be set. |
 | `extraSplitChars` | `string` | `,;.` | Characters that can be used as split markers for plain text.
 
 ### About: synthesizer
